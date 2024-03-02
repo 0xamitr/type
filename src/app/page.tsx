@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import styles from "./page.module.css";
 
 export default function Home() {
 
@@ -24,34 +23,36 @@ export default function Home() {
 
   useEffect(()=>{
     const handleKeyDown = (event: any) => {
-      if(start == false){
-        startTime()
-        start = true
-      }
-      if(event.key == " "){
-        temp++
-      }
-      console.log(time)
-      if(event.key == text[index]){
-        console.log(event.key)
-        index++
-        document.getElementById(`${index}`)?.classList.add("typed")
-      }
-      if(index == text.length) {
-        console.log("done")
-        clearInterval(timerID)
-        setFinish(true)
-        temp++
-        const n = temp / (time / 6000)
-        setWPM(Math.floor(n*100)/100)
-  
+      if(!finish){
+        if(!start){
+          startTime()
+          start = true
+        }
+        if(event.key == " "){
+          temp++
+        }
+        console.log(time)
+        if(event.key == text[index]){
+          console.log(event.key)
+          index++
+          document.getElementById(`${index}`)?.classList.add("typed")
+        }
+        if(index == text.length) {
+          console.log(finish)
+          console.log("done")
+          clearInterval(timerID)
+          setFinish(true)
+          temp++
+          const n = temp / (time / 6000)
+          setWPM(Math.floor(n*100)/100)
+        }
       }
     }
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [])
+  }, [finish])
 
    return (
     <main>
