@@ -60,7 +60,7 @@ export default function Home() {
         {Array.from(text).map((letter: String)=> {
           {setindex++}
           return(
-            <span id={`${setindex}`}>{letter}</span>
+            <span key={setindex} id={`${setindex}`}>{letter}</span>
           )
         })}
         </h2>
