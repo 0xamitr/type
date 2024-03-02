@@ -36,12 +36,14 @@ export default function Home() {
       index++
       document.getElementById(`${index}`)?.classList.add("typed")
     }
-    if(index > text.length-1) {
+    if(index == text.length) {
       console.log("done")
       clearInterval(timerID)
       setFinish(true)
       temp++
-      setWPM(temp / (time / 6000))
+      const n = temp / (time / 6000)
+      setWPM(Math.floor(n*100)/100)
+
     }
   }
   useEffect(()=>{
