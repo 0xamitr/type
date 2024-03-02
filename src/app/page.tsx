@@ -5,9 +5,8 @@ import styles from "./page.module.css";
 
 export default function Home() {
 
+  const [wpm, setWPM] = useState(0)
   const [finish, setFinish] = useState(false)
-  const [finaltime, setFinalTime] = useState(0)
-  const [words, setWords] = useState(0)
 
   let time:number = 0
   const text:String = "Hi! what is this that you are doing!"
@@ -15,11 +14,12 @@ export default function Home() {
   let index:number = 0
   let timerID: any
   let start = false
+  let temp = 0
 
   const startTime = () => {
     timerID = setInterval(()=>{
       time++;
-    }, 1000)
+    }, 10)
   }
 
   const handleKeyDown = (event: any) => {
@@ -28,7 +28,7 @@ export default function Home() {
       start = true
     }
     if(event.key == " "){
-      setWords(words+1)
+      temp++
     }
     console.log(time)
     if(event.key == text[index]){
@@ -40,13 +40,12 @@ export default function Home() {
       console.log("done")
       clearInterval(timerID)
       setFinish(true)
-      setFinalTime(time)
+      temp++
+      setWPM(temp / (time / 6000))
     }
   }
-
   useEffect(()=>{
     document.addEventListener('keydown', handleKeyDown);
-
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
@@ -64,7 +63,7 @@ export default function Home() {
         })}
         </h2>
         {finish &&
-          <h2>{words / (finaltime / 60)} wpm</h2>        
+          <h2>{wpm} wpm</h2>        
         }
       </div>
     </main>
