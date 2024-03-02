@@ -1,10 +1,72 @@
-import Image from "next/image";
+'use client'
+
+import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 
 export default function Home() {
-  return (
+
+  const [finish, setFinish] = useState(false)
+  const [finaltime, setFinalTime] = useState(0)
+  const [words, setWords] = useState(0)
+
+  let time:number = 0
+  const text:String = "Hi! what is this that you are doing!"
+  let setindex:number = 0
+  let index:number = 0
+  let timerID: any
+  let start = false
+
+  const startTime = () => {
+    timerID = setInterval(()=>{
+      time++;
+    }, 1000)
+  }
+
+  const handleKeyDown = (event: any) => {
+    if(start == false){
+      startTime()
+      start = true
+    }
+    if(event.key == " "){
+      setWords(words+1)
+    }
+    console.log(time)
+    if(event.key == text[index]){
+      console.log(event.key)
+      index++
+      document.getElementById(`${index}`)?.classList.add("typed")
+    }
+    if(index > text.length-1) {
+      console.log("done")
+      clearInterval(timerID)
+      setFinish(true)
+      setFinalTime(time)
+    }
+  }
+
+  useEffect(()=>{
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [])
+
+   return (
     <main>
-      HEllop
+      <div>
+        <h2>
+        {Array.from(text).map((letter: String)=> {
+          {setindex++}
+          return(
+            <span id={`${setindex}`}>{letter}</span>
+          )
+        })}
+        </h2>
+        {finish &&
+          <h2>{words / (finaltime / 60)} wpm</h2>        
+        }
+      </div>
     </main>
-  );
+  )
 }
