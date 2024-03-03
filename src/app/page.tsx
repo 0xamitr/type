@@ -1,74 +1,29 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import Text from './components/text';
+import randomText from './Features/RandomText';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+  const [text, setText] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [wpm, setWPM] = useState(0)
-  const [finish, setFinish] = useState(false)
+  const fetchRandomText = () => {
+    const random = randomText();
+    setText(random);
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    fetchRandomText();
+  }, []);
 
-  let time:number = 0
-  const text:String = "Hi! what is this that you are doing!"
-  let setindex:number = 0
-  let index:number = 0
-  let timerID: any
-  let start = false
-  let temp = 0
-
-  const startTime = () => {
-    timerID = setInterval(()=>{
-      time++;
-    }, 10)
-  }
-
-  useEffect(()=>{
-    const handleKeyDown = (event: any) => {
-      if(!finish){
-        if(!start){
-          startTime()
-          start = true
-        }
-        if(event.key == " "){
-          temp++
-        }
-        console.log(time)
-        if(event.key == text[index]){
-          console.log(event.key)
-          index++
-          document.getElementById(`${index}`)?.classList.add("typed")
-        }
-        if(index == text.length) {
-          console.log(finish)
-          console.log("done")
-          clearInterval(timerID)
-          setFinish(true)
-          temp++
-          const n = temp / (time / 6000)
-          setWPM(Math.floor(n*100)/100)
-        }
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [finish])
-
-   return (
-    <main>
-      <div>
-        <h2>
-        {Array.from(text).map((letter: String)=> {
-          {setindex++}
-          return(
-            <span key={setindex} id={`${setindex}`}>{letter}</span>
-          )
-        })}
-        </h2>
-        {finish &&
-          <h2>{wpm} wpm</h2>        
-        }
-      </div>
-    </main>
-  )
+  return (
+    <div>
+      {isLoading ? (
+        <h2>Loading...</h2>
+      ) : (
+        <Text text={text} fetchRandomText={fetchRandomText} />
+      )}
+    </div>
+  );
 }
