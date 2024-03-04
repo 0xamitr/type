@@ -1,12 +1,15 @@
-export default function randomText(){
-    const text = [
-        "Hello, I am under the water. Here too much raining!",
-        "Who are you, I dont know. Please introduce yourself",
-        "Hi! This is detective Sherlock Holmes and I am here to arrest you.",
-        "Where were you at 9/11. I was at Home eating dorittos. NO!",
-        "Why are you the way you are. Please change.",
-        "The earth is dying and so are you.",
-        "Change the bloody curtains and dont forget to smile."
-    ]
-    return(text[Math.floor(Math.random() * text.length)])
+import { arr } from '../../../public/wordarray';
+
+export default async function randomText(){
+    console.log(Math.floor(Math.random() * arr.length))
+    const length = Math.random() * (15 - 10) + 10;
+    let text = ""
+    for(let i = 0; i < length; i++){
+      const temp = Math.floor(Math.random() * arr.length)
+      text += arr[temp]
+      if(i < length-1)
+        text += " "
+    }
+    console.log(text)
+    return text
 }
