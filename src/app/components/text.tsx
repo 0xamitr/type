@@ -19,11 +19,11 @@ export default function Text(props: any) {
             time++;
         }, 10)
     }
-
     useEffect(() => {
         console.log("length", text.length)
         console.log(finish)
         const handleKeyDown = (event: any) => {
+
                 if (!start) {
                     startTime()
                     start = true
@@ -32,9 +32,11 @@ export default function Text(props: any) {
                     temp++
                 }
                 if (event.key == text[index]) {
+                    document.querySelector(".current")?.classList.remove("current")
                     console.log(event.key)
                     index++
                     document.getElementById(`${index}`)?.classList.add("typed")
+                    document.getElementById(`${index+1}`)?.classList.add("current")
                 }
                 if (index == text.length) {
                     console.log("ok")
@@ -57,8 +59,11 @@ export default function Text(props: any) {
             <h2>
                 {Array.from(text).map((letter: String) => {
                     setindex++
+                    let wtf = ""
+                    if(setindex == 1)
+                        wtf = "current"
                     return (
-                        <span key={uuidv4()} id={`${setindex}`}>{letter}</span>
+                        <span key={uuidv4()} id={`${setindex}`} className={wtf}>{letter}</span>
                     )
                 })}
             </h2>

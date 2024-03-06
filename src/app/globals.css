@@ -1,3 +1,13 @@
-.typed{
+.typed {
   color: grey;
+}
+
+.current {
+  animation: animate-bg 1s infinite;
+}
+
+@keyframes animate-bg {
+  0% {background-color: transparent;}
+  50% {background-color: grey;}
+  0% {background-color: transparent;}
 }
