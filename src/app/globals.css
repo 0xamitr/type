@@ -2,6 +2,10 @@
   color: grey;
 }
 
+.wrong{
+  color: red;
+}
+
 .current {
   animation: animate-bg 1s infinite;
 }
