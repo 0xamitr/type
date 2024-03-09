@@ -55,6 +55,7 @@ export default function Text(props: any) {
                 setFinish(true)
                 setWrong(wrongvar)
                 props.fetchRandomText()
+                setCheck(!check)
                 temp++
                 const n = temp / (time / 6000)
                 setWPM(Math.floor(n * 100) / 100)
@@ -64,7 +65,7 @@ export default function Text(props: any) {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [finish, text, check])
+    }, [finish, check, text])
 
     return (
         <div>
