@@ -1,11 +1,13 @@
 'use client'
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
+import React from 'react';
 
 export default function Text(props: any) {
     const [wpm, setWPM] = useState(0)
     const [finish, setFinish] = useState(false)
     const [wrong, setWrong] = useState(0)
+    const [check, setCheck] = useState(false)
 
     let time: number = 0
     let text: String = props.text;
@@ -22,12 +24,9 @@ export default function Text(props: any) {
         }, 10)
     }
     useEffect(() => {
-        console.log("length", text.length)
-        console.log(finish)
         const handleKeyDown = (event: any) => {
-            console.log(event.key)
             if(event.key == "Escape"){
-                setFinish(true)
+                setCheck(!check)
             }
             if(event.key == "Shift" || event.key == "CapsLock" || event.key == "Control"){
                 return
@@ -39,22 +38,19 @@ export default function Text(props: any) {
             if (event.key == " ") {
                 temp++
             }
-            if (event.key == text[index]) {
+            if (event.key == text[index] || (text[index] == "↵" && event.key == "Enter")) {
                 document.querySelector(".current")?.classList.remove("current")
-                console.log(event.key)
                 index++
                 document.getElementById(`${index}`)?.classList.add("typed")
                 document.getElementById(`${index+1}`)?.classList.add("current")
             }
             else{
                 if(!document.getElementById(`${index+1}`)?.classList.contains("wrong")){
-                    console.log("wrong", event.key, text[index], index)
                     document.getElementById(`${index+1}`)?.classList.add("wrong")
                     wrongvar++;
                 }
             }
             if (index == text.length) {
-                console.log("ok")
                 clearInterval(timerID)
                 setFinish(true)
                 setWrong(wrongvar)
@@ -66,10 +62,9 @@ export default function Text(props: any) {
         }
         document.addEventListener('keydown', handleKeyDown);
         return () => {
-            console.log(":fsklajfkl")
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [finish, text])
+    }, [finish, text, check])
 
     return (
         <div>
@@ -80,8 +75,13 @@ export default function Text(props: any) {
                     if(setindex == 1)
                         wtf = "current"
                     return (
-                        <span key={uuidv4()} id={`${setindex}`} className={wtf}>{letter}</span>
-                    )
+                        <React.Fragment key={uuidv4()}> 
+                            <span id={`${setindex}`} className={wtf}>
+                                {letter}
+                            </span>
+                            {letter == "↵" && <br />}
+                        </React.Fragment>
+                    ) 
                 })}
             </h2>
             {finish &&

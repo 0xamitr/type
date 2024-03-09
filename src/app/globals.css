@@ -15,3 +15,38 @@
   50% {background-color: grey;}
   0% {background-color: transparent;}
 }
+
+.container {
+  position: absolute;
+  top:1vh;
+  left: 10vw;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch {
+  display: inline-block;
+  position: relative;
+  width: 60px;
+  height: 34px;
+  background-color: #ccc;
+  border-radius: 17px;
+}
+
+.switch div {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.switch.checked div {
+  transform: translateX(26px);
+  background-color: black;
+}
