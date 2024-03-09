@@ -47,9 +47,11 @@ export default function Text(props: any) {
                 document.getElementById(`${index+1}`)?.classList.add("current")
             }
             else{
-                console.log("wrong", event.key, text[index], index)
-                document.getElementById(`${index+1}`)?.classList.add("wrong")
-                wrongvar++;
+                if(!document.getElementById(`${index+1}`)?.classList.contains("wrong")){
+                    console.log("wrong", event.key, text[index], index)
+                    document.getElementById(`${index+1}`)?.classList.add("wrong")
+                    wrongvar++;
+                }
             }
             if (index == text.length) {
                 console.log("ok")
