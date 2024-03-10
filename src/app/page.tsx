@@ -34,7 +34,7 @@ export default function Home() {
           <div></div>
         </label>
       </div>
-      <div>
+      <div id='text'>
         {isLoading ? (
           <h2>Loading...</h2>
         ) : (

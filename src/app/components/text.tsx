@@ -40,6 +40,11 @@ export default function Text(props: any) {
             }
             if (event.key == text[index] || (text[index] == "↵" && event.key == "Enter")) {
                 document.querySelector(".current")?.classList.remove("current")
+                console.log(document.getElementById(`${index+2}`)?.textContent)
+                if(document.getElementById(`${index+2}`)?.textContent == "    "){
+                    index++
+                    console.log("fafda")
+                }
                 index++
                 document.getElementById(`${index}`)?.classList.add("typed")
                 document.getElementById(`${index+1}`)?.classList.add("current")
@@ -68,8 +73,8 @@ export default function Text(props: any) {
     }, [finish, check, text])
 
     return (
-        <div>
-            <h2>
+        <>
+            <p>
                 {Array.from(text).map((letter: String) => {
                     setindex++
                     let wtf = ""
@@ -78,19 +83,19 @@ export default function Text(props: any) {
                     return (
                         <React.Fragment key={uuidv4()}> 
                             <span id={`${setindex}`} className={wtf}>
-                                {letter}
+                                {letter == "^" ? <>&nbsp;&nbsp;&nbsp;&nbsp;</>: letter}
                             </span>
                             {letter == "↵" && <br />}
                         </React.Fragment>
                     ) 
                 })}
-            </h2>
+            </p>
             {finish &&
                 <>
-                    <h3>Speed: {wpm} wpm</h3>
-                    <h3>Accuracy: {Math.floor((100-((wrong/text.length)*100)) * 100) / 100}%</h3>
+                    <p>Speed: {wpm} wpm</p>
+                    <p>Accuracy: {Math.floor((100-((wrong/text.length)*100)) * 100) / 100}%</p>
                 </>
             }
-        </div>
+        </>
     )
 }
