@@ -3,7 +3,6 @@ import Image from "next/image"
 import { Inter } from "next/font/google";
 import icon from "../../public/typing-icon.svg"
 import "./globals.css";
-import next from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
