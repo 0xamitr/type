@@ -10,7 +10,7 @@ export default function Text(props: any) {
     const [check, setCheck] = useState(false)
 
     let time: number = 0
-    let text: String = props.text;
+    let text: String = props.text
     let setindex: number = 0
     let index: number = 0
     let timerID: any
@@ -23,8 +23,13 @@ export default function Text(props: any) {
             time++;
         }, 10)
     }
+
     useEffect(() => {
         const handleKeyDown = (event: any) => {
+            if(event.key == " "){
+                console.log("its space")
+                event.preventDefault()
+            }
             if(event.key == "Escape"){
                 setCheck(!check)
             }

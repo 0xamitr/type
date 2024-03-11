@@ -29,14 +29,14 @@ export default function Home() {
   return (
     <>
       <div className="container">
-        <p>Code (BETA)</p>
+        <p>Code(beta)</p>
         <label onClick={handleClick} className={`switch ${iscode ? 'checked' : ''}`}>
           <div></div>
         </label>
       </div>
       <div id='text'>
         {isLoading ? (
-          <h2>Loading...</h2>
+          <p>Loading...</p>
         ) : (
           <Text text={text} fetchRandomText={fetchRandomText} />
         )}
