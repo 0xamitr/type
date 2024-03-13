@@ -8,6 +8,7 @@ export default function Text(props: any) {
     const [finish, setFinish] = useState(false)
     const [wrong, setWrong] = useState(0)
     const [check, setCheck] = useState(false)
+    const [lswpm , setlsWpm] = useState(0);
 
     let time: number = 0
     let text: String = props.text
@@ -25,6 +26,10 @@ export default function Text(props: any) {
     }
 
     useEffect(() => {
+        const a = localStorage.getItem("WPMcount")
+        const b = localStorage.getItem("totalWPM")
+        if(a!=null && b!=null)
+            setlsWpm(Math.floor(parseFloat(b)/parseFloat(a) * 100) / 100)
         const handleKeyDown = (event: any) => {
             if(event.key == " "){
                 console.log("its space")
@@ -61,14 +66,25 @@ export default function Text(props: any) {
                 }
             }
             if (index == text.length) {
+                const n = temp / (time / 6000)
+                const wpmtemp = Math.floor(n * 100) / 100
+                const totalWPM = localStorage.getItem("totalWPM")
+                const WPMcount = localStorage.getItem("WPMcount")
+                if(totalWPM == null)
+                    localStorage.setItem("totalWPM", ""+wpmtemp)
+                else    
+                    localStorage.setItem("totalWPM", (parseFloat(totalWPM) + wpmtemp) + "")
+                if(WPMcount == null)
+                    localStorage.setItem("WPMcount", ""+1)
+                else
+                    localStorage.setItem("WPMcount", (parseInt(WPMcount)+1) + "")
                 clearInterval(timerID)
                 setFinish(true)
                 setWrong(wrongvar)
                 props.fetchRandomText()
                 setCheck(!check)
                 temp++
-                const n = temp / (time / 6000)
-                setWPM(Math.floor(n * 100) / 100)
+                setWPM(wpmtemp)
             }
         }
         document.addEventListener('keydown', handleKeyDown);
@@ -101,6 +117,7 @@ export default function Text(props: any) {
                     <p>Accuracy: {Math.floor((100-((wrong/text.length)*100)) * 100) / 100}%</p>
                 </>
             }
+            <p>Average Speed: {lswpm}</p>
         </>
     )
 }

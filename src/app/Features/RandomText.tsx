@@ -25,6 +25,5 @@ export default function randomText(){
         j++;
       }
     }
-    console.log(text)
     return text
 }
