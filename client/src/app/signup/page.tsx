@@ -1,10 +1,22 @@
 "use client"
 
 export default function SignUp(){
-    const handleSubmit = (e: any)=> {
+    let url = "http://127.0.0.1:5000/register"
+    const handleSubmit = async(e: any)=> {
         e.preventDefault();
-        console.log(e.target[0].value)
-        console.log(e.target[1].value)
+        let data = {
+            name : e.target[0].value,
+            email: e.target[1].value,
+            password : e.target[2].value
+        }
+        const response = await fetch(url, {
+            method: "POST", 
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+        console.log(data)
     }
     return(
         <>
@@ -12,11 +24,15 @@ export default function SignUp(){
             <form onSubmit={handleSubmit}>
                 <label>
                     <p>UserName</p>
-                    <input type="username"/>
+                    <input type="text" required minLength={4} maxLength={20}/>
+                </label>
+                <label>
+                    <p>EMAIL</p>
+                    <input type="email" required/>
                 </label>
                 <label>
                     <p>Password</p>
-                    <input type="password"/>
+                    <input type="password"required minLength={8} maxLength={20}/>
                 </label>
                 <input type="submit" />
             </form>
