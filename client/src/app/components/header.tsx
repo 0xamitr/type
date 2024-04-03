@@ -7,16 +7,13 @@ import {getToken, destroyToken} from '../Features/TokenStorage'
 import { useEffect, useState } from "react"
 
 export function Header(){
-    let temp
-    if(getToken() == null)
-        temp = false
-    else
-        temp = true
-    const [isloggedin, setIsloggedin] = useState(temp)
+    const [isloggedin, setIsloggedin] = useState(false)
+    const [show, setShow] = useState(false)
     useEffect(()=>{
         const token = getToken();
         if(token != null)
             setIsloggedin(true)
+        setShow(true)
     }, [])
     return(
         <header>
@@ -25,12 +22,8 @@ export function Header(){
                 <h2>TYPE</h2>
             </div>
             <div className="right">
-                {
-                    isloggedin?
-                    <a onClick={destroyToken}>logout</a>
-                    :
-                    <Link href="/login">Login</Link>
-                }
+                {show && isloggedin && <a onClick={destroyToken}>logout</a>}
+                {show && !isloggedin && <Link href="/login">Login</Link>}    
             </div>
         </header>
     )
