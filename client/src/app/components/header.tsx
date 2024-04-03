@@ -7,12 +7,17 @@ import {getToken, destroyToken} from '../Features/TokenStorage'
 import { useEffect, useState } from "react"
 
 export function Header(){
-    const [isloggedin, setIsloggedin] = useState(false)
+    let temp
+    if(getToken() == null)
+        temp = false
+    else
+        temp = true
+    const [isloggedin, setIsloggedin] = useState(temp)
     useEffect(()=>{
         const token = getToken();
         if(token != null)
             setIsloggedin(true)
-    })
+    }, [])
     return(
         <header>
             <div className="left">
