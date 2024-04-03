@@ -58,8 +58,22 @@
   width: 40vw;
 }
 
-header{
+.left{
   padding-left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+header{
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.right{
+  display: flex;
+  padding-right: 10vw;
   display: flex;
   align-items: center;
   gap: 10px;

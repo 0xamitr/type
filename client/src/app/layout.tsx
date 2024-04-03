@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image"
 import { Inter } from "next/font/google";
 import icon from "../../public/typing-icon.svg"
 import "./globals.css";
+import {Header} from "./components/header"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header>
-          <Image className="logo" src={icon} alt="keyboard logo"></Image>
-          <h2>TYPE</h2>
-        </header>
+        <Header />
         <main>
           {children}
         </main>
