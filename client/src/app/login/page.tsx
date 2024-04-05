@@ -1,8 +1,5 @@
 "use client"
 
-import {storeToken, getToken} from '../Features/TokenStorage'
-import { redirect } from 'next/navigation'
-
 export default function Login(){
     let url = "http://127.0.0.1:5000/login"
     const handleSubmit = async(e: any)=> {
@@ -16,14 +13,13 @@ export default function Login(){
             headers: {
               "Content-Type": "application/json",
             },
+            credentials: 'include' as RequestCredentials,
             body: JSON.stringify(data),
         });
-        const responseBody = await response.json();
         console.log("Response:", response);
+        const responseBody = await response.json();
         console.log("Response Body:", responseBody);
-        if(responseBody.access_token && getToken() == null){
-            storeToken(responseBody.access_token)
-            redirect('/');
+        if(responseBody.access_token){
         }
     }
     return(
