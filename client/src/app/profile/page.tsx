@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 
-export default function profile(){
+export default function Profile(){
     const [userdata, setUserData] = useState<any>(null); // Use 'any' type to suppress type checking
     const handle = async() =>{
         const fetchOptions = {
