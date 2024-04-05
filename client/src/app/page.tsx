@@ -11,7 +11,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [iscode, setIscode] = useState(false)
 
-  const handle = async() =>{
+  const logout = async() =>{
     const fetchOptions = {
       method: 'GET',
       headers: {
@@ -21,7 +21,7 @@ export default function Home() {
       withCredentials: true,
     };
 
-    fetch('http://127.0.0.1:5000/protected', fetchOptions)
+    fetch('http://127.0.0.1:5000/logout', fetchOptions)
   }
   const handleClick = () => {
     setIscode(!iscode)
@@ -54,7 +54,8 @@ export default function Home() {
           <Text text={text} fetchRandomText={fetchRandomText} />
         )}
       </div>
-      <button onClick={handle}></button>
+      <button onClick={logout}>LOGOUT</button>
+
     </>
   );
 }

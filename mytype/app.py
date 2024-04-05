@@ -14,7 +14,7 @@ expiration_time = datetime.now() + timedelta(days=7)
 app = Flask(__name__)
 CORS(app, supports_credentials=True)  # Enable CORS with credentials support
 
-app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
 app.config["JWT_SECRET_KEY"] = "super-secret"
 app.config['MYSQL_USER'] = 'sql6695551'
 app.config['MYSQL_PASSWORD'] = 'qB9zge7eHz'
@@ -65,7 +65,7 @@ def check():
         if result:
             hashed_password = result['password']
             if bcrypt.check_password_hash(hashed_password, password):
-                access_token = create_access_token(identity=email)
+                access_token = create_access_token(identity=email, expires_delta=timedelta(days=7))
                 response = make_response(jsonify({'success': True}))
                 response.set_cookie('access_token_cookie', access_token, expires=expiration_time, httponly=True, secure=True, samesite='None')
                 return response
@@ -80,7 +80,7 @@ def check():
 def logout():
     response = jsonify({'logout': True})
     response = make_response(response)
-    unset_jwt_cookies(response)
+    response.set_cookie('access_token_cookie', '', expires=0, httponly=True, secure=True, samesite='None')
     return response
 
 @jwt_required
