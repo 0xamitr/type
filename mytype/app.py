@@ -6,8 +6,9 @@ from flask_bcrypt import Bcrypt
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import JWTManager
-from flask_jwt_extended import jwt_required, get_jwt_identity, unset_jwt_cookies, verify_jwt_in_request
+from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 from datetime import datetime, timedelta
+from jwt.exceptions import InvalidTokenError
 
 expiration_time = datetime.now() + timedelta(days=7)
 
@@ -89,12 +90,25 @@ def protected():
     try:
         verify_jwt_in_request()
         user_id = get_jwt_identity()
-        app.logger.info("User ID: {}".format(user_id))
-        return jsonify({'user_id': user_id}), 200
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT id, username, total_tests, tests_today, overall_accuracy, accuracy_today, overall_wpm,wpm_today, highest_wpm_ever, highest_wpm_today, highest_accuracy_today FROM users WHERE email = %s", [user_id])
+        user_data = cur.fetchone()
+        cur.close()
+        return (user_data)
     except Exception as e:
-        app.logger.error("Error retrieving user identity: {}".format(str(e)))
         return jsonify({'error': 'Internal Server Error'}), 500
 
+@jwt_required
+@app.route('/check-login')
+def checkLogin():
+    try:
+        verify_jwt_in_request()
+        if get_jwt_identity():
+            return jsonify(logged_in=True), 200
+    except InvalidTokenError as e:
+        return jsonify(logged_in=False), 200
+    except Exception as e:
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -11,18 +11,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [iscode, setIscode] = useState(false)
 
-  const logout = async() =>{
-    const fetchOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include' as RequestCredentials,
-      withCredentials: true,
-    };
-
-    fetch('http://127.0.0.1:5000/logout', fetchOptions)
-  }
   const handleClick = () => {
     setIscode(!iscode)
   }
@@ -54,7 +42,6 @@ export default function Home() {
           <Text text={text} fetchRandomText={fetchRandomText} />
         )}
       </div>
-      <button onClick={logout}>LOGOUT</button>
 
     </>
   );
