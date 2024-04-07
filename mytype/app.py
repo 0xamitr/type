@@ -119,6 +119,7 @@ def submit():
         accuracy = data['accuracy']
         user = data['user']
         print("wpm:", wpm, "accuracy:", accuracy, "user:", user)
+        
         return jsonify({"message": "ok"}), 200
     except InvalidTokenError as e:
         app.logger.error("Invalid JWT: {}".format(e))
