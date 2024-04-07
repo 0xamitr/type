@@ -1,7 +1,8 @@
 'use client'
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
-import React from 'react';
+import React from 'react'
+import {submit} from '../Features/SubmitText'
 
 export default function Text(props: any) {
     const [wpm, setWPM] = useState(0)
@@ -67,6 +68,8 @@ export default function Text(props: any) {
                 setCheck(!check)
                 temp++
                 setWPM(wpmtemp)
+                const acc = Math.floor((100-((wrong/text.length)*100)) * 100) / 100
+                submit(wpmtemp, acc)
             }
         }
         document.addEventListener('keydown', handleKeyDown);

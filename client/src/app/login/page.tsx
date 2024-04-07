@@ -1,6 +1,8 @@
 "use client"
+import { useRouter } from 'next/navigation'
 
 export default function Login(){
+    const router = useRouter()
     let url = "http://127.0.0.1:5000/login"
     const handleSubmit = async(e: any)=> {
         e.preventDefault();
@@ -16,10 +18,9 @@ export default function Login(){
             credentials: 'include' as RequestCredentials,
             body: JSON.stringify(data),
         });
-        console.log("Response:", response);
-        const responseBody = await response.json();
-        console.log("Response Body:", responseBody);
-        if(responseBody.access_token){
+        if(response.ok){
+            router.push('/')
+            window.dispatchEvent(new Event('loginStatusChanged'));
         }
     }
     return(

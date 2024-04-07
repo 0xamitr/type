@@ -1,10 +1,10 @@
 "use client"
-
 import Image from "next/image"
 import icon from "../../../public/typing-icon.svg"
 import Logout from './logout';
 import { useEffect, useState } from "react"
 import Link from "next/link"
+
 
 export function Header(){
     const [loggedin, setLoggedin] = useState(false)
@@ -24,10 +24,26 @@ export function Header(){
             const check = await response.json();
             if(check['logged_in'] == true)
                 setLoggedin(true)
+            else
+                setLoggedin(false)
             setShowlogin(true)
         }
         checkLogin()
-    }, [])
+        window.addEventListener('loginStatusChanged', handleLoginStatusChange);
+        window.addEventListener('logout', handleLogout);
+        return () => {
+            window.removeEventListener('loginStatusChanged', handleLoginStatusChange);
+            window.removeEventListener('logout', handleLogout);
+        };
+    }, []);
+
+    const handleLoginStatusChange = () => {
+        setLoggedin(true);
+    }
+
+    const handleLogout = () => {
+        setLoggedin(false);
+    }
     return(
         <header>
             <div className="left">
@@ -37,7 +53,7 @@ export function Header(){
             {showlogin && 
                 <div className="right">
                     {loggedin ?
-                        <Logout />:
+                        <Logout/>:
                         <Link href={"/login"}>Login</Link>
                     }
                 </div>

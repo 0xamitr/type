@@ -15,8 +15,8 @@ export default function SignUp(){
               "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
-          });
-        console.log(data)
+            credentials: 'include' as RequestCredentials,
+        });
     }
     return(
         <>
