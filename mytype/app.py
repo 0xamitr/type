@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from flask_mysqldb import MySQL
 from flask_cors import CORS
-from database_operation import create_user
+from database_operation import create_user, handle_submit
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import JWTManager
@@ -14,15 +14,16 @@ expiration_time = datetime.now() + timedelta(days=7)
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-
 app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
 app.config["JWT_SECRET_KEY"] = "super-secret"
-app.config['MYSQL_USER'] = 'sql6695551'
-app.config['MYSQL_PASSWORD'] = 'qB9zge7eHz'
-app.config['MYSQL_HOST'] = 'sql6.freemysqlhosting.net' 
-app.config['MYSQL_DB'] = 'sql6695551'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SECRET_KEY'] = 'your_secret_key_here'
+app.config['MYSQL_HOST'] = 'mysql-18fbfb82-amitrathore-96a8.a.aivencloud.com'
+app.config['MYSQL_USER'] = 'avnadmin'
+app.config['MYSQL_PASSWORD'] = 'AVNS_uKdw3m8lkfZz8epvCyZ'
+app.config['MYSQL_DB'] = 'defaultdb'
+app.config['MYSQL_PORT'] = 26670
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+app.config['MYSQL_SSL_CA'] = '/path/to/your/ca/certificate.pem'
 
 jwt = JWTManager(app)
 mysql = MySQL(app)
@@ -89,12 +90,23 @@ def logout():
 def protected():
     try:
         verify_jwt_in_request()
-        user_id = get_jwt_identity()
+        email = get_jwt_identity()
         cur = mysql.connection.cursor()
-        cur.execute("SELECT id, username, total_tests, tests_today, overall_accuracy, accuracy_today, overall_wpm,wpm_today, highest_wpm_ever, highest_wpm_today, highest_accuracy_today FROM users WHERE email = %s", [user_id])
+        cur.execute('''SELECT id, username, email FROM users WHERE email = %s'''
+        , [email])
         user_data = cur.fetchone()
+        cur.execute('''SELECT text_tests, text_tests_today, cumm_text_accuracy, cumm_text_accuracy_today, cumm_text_wpm, cumm_text_wpm_today, highest_text_wpm_ever, highest_text_wpm_today FROM users WHERE email = %s'''
+        , [email])
+        text_data = cur.fetchone()
+        cur.execute('''SELECT code_tests, code_tests_today, cumm_code_accuracy, cumm_code_accuracy_today, cumm_code_wpm, cumm_code_wpm_today, highest_code_wpm_ever, highest_code_wpm_today FROM users WHERE email = %s'''
+        , [email])
+        code_data = cur.fetchone()
         cur.close()
-        return (user_data)
+        return jsonify({
+            'user_data': user_data,
+            'text_data': text_data,
+            'code_data': code_data
+        })
     except Exception as e:
         return jsonify({'error': 'Internal Server Error'}), 500
 
@@ -118,18 +130,10 @@ def submit():
         wpm = data['wpm']
         accuracy = data['accuracy']
         user = data['user']
-        print("wpm:", wpm, "accuracy:", accuracy, "user:", user)
-        
+        iscode = data['iscode']
+        cur = mysql.connection.cursor()
+        handle_submit(cur, mysql, wpm, accuracy, user, iscode)
         return jsonify({"message": "ok"}), 200
-    except InvalidTokenError as e:
-        app.logger.error("Invalid JWT: {}".format(e))
-        return jsonify({'error': 'Invalid JWT'}), 401
-    except ExpiredSignatureError as e:
-        app.logger.error("Expired JWT: {}".format(e))
-        return jsonify({'error': 'Expired JWT'}), 401
-    except KeyError as e:
-        app.logger.error("KeyError: {}".format(e))
-        return jsonify({'error': 'Missing or invalid data in request'}), 400
     except Exception as e:
         app.logger.error("Unexpected error: {}".format(e))
         return jsonify({'error': 'Internal Server Error'}), 500

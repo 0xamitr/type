@@ -1,5 +1,5 @@
 
-export async function submit(wpm: Number, accuracy: Number){
+export async function submit(wpm: Number, accuracy: Number, iscode: boolean){
     let user
     const fetchOptions1 = {
         method: 'GET',
@@ -24,7 +24,8 @@ export async function submit(wpm: Number, accuracy: Number){
         body: JSON.stringify({
             'wpm': wpm, 
             'accuracy': accuracy,
-            'user': user
+            'user': user,
+            'iscode': iscode,
         }),
     }
     const response = await fetch('http://127.0.0.1:5000/submit', fetchOptions)

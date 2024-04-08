@@ -18,7 +18,6 @@ export default function Text(props: any) {
     let start: boolean = false
     let temp: number = 0
     let wrongvar: number = 0
-
     const startTime = () => {
         timerID = setInterval(() => {
             time++;
@@ -69,7 +68,7 @@ export default function Text(props: any) {
                 temp++
                 setWPM(wpmtemp)
                 const acc = Math.floor((100-((wrong/text.length)*100)) * 100) / 100
-                submit(wpmtemp, acc)
+                submit(wpmtemp, acc, props.iscode)
             }
         }
         document.addEventListener('keydown', handleKeyDown);

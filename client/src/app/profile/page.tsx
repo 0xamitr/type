@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 export default function Profile(){
-    const [user_data, setUser_Data] = useState<any>(null); // Use 'any' type to suppress type checking
+    const [data, setData] = useState<any>(null); // Use 'any' type to suppress type checking
     const handle = async() =>{
         const fetchOptions = {
           method: 'GET',
@@ -14,34 +14,43 @@ export default function Profile(){
         };
     
         const response = await fetch('http://127.0.0.1:5000/protected', fetchOptions)
-        const data = await response.json()
-        console.log(data)
-        setUser_Data(data)
+        const responsedata = await response.json()
+        console.log(responsedata)
+        setData(responsedata)
     }
     useEffect(()=>{
         handle();
     }, [])
 
-    const renderValue = (value: any) => {
-        return value !== null ? value : 0;
-      };
     return(
         <>
             <h2>PROFILE</h2>
-            {user_data && 
+            {data &&
                 <div>
-                    <p>Id: {user_data.id}</p>
-                    <p>Username: {user_data.username}</p>
-                    <p>Total Tests: {renderValue(user_data.total_tests)}</p>
-                    <p>Tests Today: {renderValue(user_data.tests_today)}</p>
-                    <p>Overall Accuracy: {renderValue(user_data.overall_accuracy)}</p>
-                    <p>Accuracy Today: {renderValue(user_data.accuracy_today)}</p>
-                    <p>Overall WPM: {renderValue(user_data.overall_wpm)}</p>
-                    <p>WPM Today: {renderValue(user_data.wpm_today)}</p>
-                    <p>Highest WPM Ever: {renderValue(user_data.highest_wpm_ever)}</p>
-                    <p>Highest WPM Today: {renderValue(user_data.highest_wpm_today)}</p>
-                    <p>Highest Accuracy Today: {renderValue(user_data.highest_accuracy_today)}</p>
-                </div>
+                    <div>
+                        <p>Id: {data.user_data.id}</p>
+                        <p>Username: {data.user_data.username}</p>
+                    </div>
+                    <div>
+                        <p>Total Tests: {(data.text_data.text_tests)}</p>
+                        <p>Tests Today: {(data.text_data.text_tests_today)}</p>
+                        <p>Overall Accuracy: {(data.text_data.cumm_text_accuracy) / data.text_data.text_tests}</p>
+                        <p>Accuracy Today: {(data.text_data.cumm_text_accuracy_today) / data.text_data.text_tests_today}</p>
+                        <p>Overall WPM: {(data.text_data.cumm_text_wpm) / data.text_data.text_tests}</p>
+                        <p>Highest WPM Today: {(data.text_data.highest_text_wpm_today)}</p>
+                        <p>Highest WPM Ever: {(data.text_data.highest_text_wpm_ever)}</p>
+                    </div>
+                    <div>
+                    <p>Total Tests: {(data.code_data.code_tests)}</p>
+                    <p>Tests Today: {(data.code_data.code_tests_today)}</p>
+                    <p>Overall Accuracy: {(data.code_data.cumm_code_accuracy) / data.code_data.code_tests}</p>
+                    <p>Accuracy Today: {(data.code_data.cumm_code_accuracy_today) / data.code_data.code_tests_today}</p>
+                    <p>Overall WPM: {(data.code_data.cumm_code_wpm) / data.code_data.code_tests}</p>
+                    <p>Highest WPM Today: {(data.code_data.highest_code_wpm_today)}</p>
+                    <p>Highest WPM Ever: {(data.code_data.highest_code_wpm_ever)}</p>
+
+                    </div>
+                </div>     
             }
         </>
     )

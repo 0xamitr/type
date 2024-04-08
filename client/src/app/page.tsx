@@ -39,7 +39,7 @@ export default function Home() {
         {isLoading ? (
           <p>Loading...</p>
         ) : (
-          <Text text={text} fetchRandomText={fetchRandomText} />
+          <Text text={text} iscode={iscode} fetchRandomText={fetchRandomText} />
         )}
       </div>
 
