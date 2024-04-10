@@ -46,14 +46,14 @@ export function Header(){
     }
     return(
         <header>
-            <div className="left">
+            <Link href='/' className="left">
                 <Image className="logo" src={icon} alt="keyboard logo"></Image>
                 <h2>TYPE</h2>
-            </div>
+            </Link>
             {showlogin && 
                 <div className="right">
                     {loggedin ?
-                        <Logout/>:
+                        <Link href={"/profile"}>Profile</Link>:
                         <Link href={"/login"}>Login</Link>
                     }
                 </div>

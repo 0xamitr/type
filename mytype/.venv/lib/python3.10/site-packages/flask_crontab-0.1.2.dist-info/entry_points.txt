@@ -1,0 +1,3 @@
+[flask.commands]
+crontab = flask_crontab:crontab_cli
+

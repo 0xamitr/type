@@ -1,4 +1,3 @@
-
 export async function submit(wpm: Number, accuracy: Number, iscode: boolean){
     let user
     const fetchOptions1 = {

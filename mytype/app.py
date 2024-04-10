@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from flask_mysqldb import MySQL
 from flask_cors import CORS
-from database_operation import create_user, handle_submit
+from database_operation import create_user, handle_submit, reset
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import JWTManager
@@ -29,12 +29,14 @@ jwt = JWTManager(app)
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
+
+
 @app.route('/')
 def index():
     cur = mysql.connection.cursor()
     cur.execute('''SELECT * FROM users''')
     results = cur.fetchall() 
-    cur.close()        
+    cur.close()
     return {'data': results}, 200
 
 @app.route('/register', methods=['POST'])
@@ -133,10 +135,18 @@ def submit():
         iscode = data['iscode']
         cur = mysql.connection.cursor()
         handle_submit(cur, mysql, wpm, accuracy, user, iscode)
+        cur.close()
         return jsonify({"message": "ok"}), 200
     except Exception as e:
         app.logger.error("Unexpected error: {}".format(e))
         return jsonify({'error': 'Internal Server Error'}), 500
 
+@app.route('/reset')
+def my_scheduled_job():
+    print('running cron job')
+    cur = mysql.connection.cursor()
+    reset(cur, mysql)
+    cur.close()
+    
 if __name__ == '__main__':
     app.run(debug=True)
