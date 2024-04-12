@@ -1,0 +1,22 @@
+# Byte-compiled / optimized Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE/Editor specific files
+.idea/
+.vscode/
+
+# Environment directory (if using virtual environments)
+venv/
+.env
+
+# Log files
+*.log
+
+# Other environment-specific files (e.g., .DS_Store on macOS)
+.DS_Store
+
+# Configuration files containing secrets (e.g., database connection strings)
+config.py

@@ -8,20 +8,21 @@ from flask_jwt_extended import JWTManager
 from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 from datetime import datetime, timedelta
 from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
+from dotenv import load_dotenv
+import os
 
 expiration_time = datetime.now() + timedelta(days=7)
-
+load_dotenv()
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
-
 app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
-app.config["JWT_SECRET_KEY"] = "super-secret"
-app.config['SECRET_KEY'] = 'your_secret_key_here'
-app.config['MYSQL_HOST'] = 'mysql-18fbfb82-amitrathore-96a8.a.aivencloud.com'
-app.config['MYSQL_USER'] = 'avnadmin'
-app.config['MYSQL_PASSWORD'] = 'AVNS_uKdw3m8lkfZz8epvCyZ'
-app.config['MYSQL_DB'] = 'defaultdb'
-app.config['MYSQL_PORT'] = 26670
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
+app.config['MYSQL_HOST'] = os.getenv("MYSQL_HOST")
+app.config['MYSQL_USER'] = os.getenv("MYSQL_USER")
+app.config['MYSQL_PASSWORD'] = os.getenv("MYSQL_PASSWORD")
+app.config['MYSQL_DB'] = os.getenv("MYSQL_DB")
+app.config['MYSQL_PORT'] = int(os.getenv("MYSQL_PORT"))
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['MYSQL_SSL_CA'] = '/path/to/your/ca/certificate.pem'
 
