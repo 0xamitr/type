@@ -15,6 +15,7 @@ expiration_time = datetime.now() + timedelta(days=7)
 load_dotenv()
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
+
 app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
@@ -29,8 +30,6 @@ app.config['MYSQL_SSL_CA'] = '/path/to/your/ca/certificate.pem'
 jwt = JWTManager(app)
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
-
-
 
 @app.route('/')
 def index():
