@@ -7,8 +7,8 @@ import {submit} from '../Features/SubmitText'
 export default function Text(props: any) {
     const [wpm, setWPM] = useState(0)
     const [finish, setFinish] = useState(false)
-    const [wrong, setWrong] = useState(0)
     const [check, setCheck] = useState(false)
+    const [accuracy, setAccuracy] = useState(0)
 
     let time: number = 0
     let text: String = props.text
@@ -62,12 +62,13 @@ export default function Text(props: any) {
                 const wpmtemp = Math.floor(n * 100) / 100
                 clearInterval(timerID)
                 setFinish(true)
-                setWrong(wrongvar)
                 props.fetchRandomText()
                 setCheck(!check)
                 temp++
                 setWPM(wpmtemp)
-                const acc = Math.floor((100-((wrong/text.length)*100)) * 100) / 100
+                const acc = Math.floor((100-((wrongvar/text.length)*100)) * 100) / 100
+                setAccuracy(acc)
+                console.log(acc)
                 submit(wpmtemp, acc, props.iscode)
             }
         }
@@ -98,7 +99,7 @@ export default function Text(props: any) {
             {finish &&
                 <>
                     <p>Speed: {wpm} wpm</p>
-                    <p>Accuracy: {Math.floor((100-((wrong/text.length)*100)) * 100) / 100}%</p>
+                    <p>Accuracy: {accuracy}%</p>
                 </>
             }
         </>

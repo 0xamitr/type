@@ -8,19 +8,19 @@ export default function randomText(){
     let text = ""
     let i = 0
     let j = 0
-    while(i + j < length + preplen){
+    while(i + j < 1 + 1){
       const decide = Math.floor(Math.random()*2)
       if(decide == 0){
         const temp = Math.floor(Math.random() * arr.length)
         text += arr[temp]
-        if(i+j < length+preplen-1)
+        if(i+j < 1+1-1)
           text += " "
         i++;
       }
       else{
         const temp = Math.floor(Math.random() * preparr.length)
         text += preparr[temp]
-        if(i+j < length+preplen-1)
+        if(i+j < 1+1-1)
           text += " "
         j++;
       }

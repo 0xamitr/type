@@ -131,6 +131,7 @@ def submit():
         data = request.get_json()
         wpm = data['wpm']
         accuracy = data['accuracy']
+        print("check" , accuracy)
         user = data['user']
         iscode = data['iscode']
         cur = mysql.connection.cursor()
