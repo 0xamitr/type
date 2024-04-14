@@ -9,7 +9,7 @@ export default function Logout(){
           withCredentials: true,
         };
     
-        fetch('http://127.0.0.1:5000/logout', fetchOptions)
+        fetch(process.env.NEXT_PUBLIC_API + '/logout', fetchOptions)
         window.dispatchEvent(new Event('logout'));
     }
     return(

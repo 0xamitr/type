@@ -1,7 +1,7 @@
 "use client"
 
 export default function SignUp(){
-    let url = "http://127.0.0.1:5000/register"
+    let url = process.env.NEXT_PUBLIC_API + "/register"
     const handleSubmit = async(e: any)=> {
         e.preventDefault();
         let data = {

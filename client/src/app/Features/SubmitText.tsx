@@ -9,7 +9,7 @@ export async function submit(wpm: Number, accuracy: Number, iscode: boolean){
         withCredentials: true,
     };
 
-    const res = await fetch('http://127.0.0.1:5000/check-login', fetchOptions1)
+    const res = await fetch(process.env.NEXT_PUBLIC_API + '/check-login', fetchOptions1)
     const check = await res.json();
     if(check['logged_in'] == true)
         user = check['user']
@@ -27,6 +27,6 @@ export async function submit(wpm: Number, accuracy: Number, iscode: boolean){
             'iscode': iscode,
         }),
     }
-    const response = await fetch('http://127.0.0.1:5000/submit', fetchOptions)
+    const response = await fetch(process.env.NEXT_PUBLIC_API + '/submit', fetchOptions)
     console.log("ok", await response.json())
 }

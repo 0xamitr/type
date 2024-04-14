@@ -14,7 +14,7 @@ export default function Profile(){
           withCredentials: true,
         }
     
-        const response = await fetch('http://127.0.0.1:5000/protected', fetchOptions)
+        const response = await fetch(process.env.NEXT_PUBLIC_API + '/protected', fetchOptions)
         const responsedata = await response.json()
         console.log(responsedata)
         setData(responsedata)

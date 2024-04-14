@@ -4,8 +4,6 @@ import randomText from './Features/RandomText';
 import randomCode from './Features/RandomCode'
 import { useEffect, useState } from 'react';
 
-// Inside your component or function
-
 export default function Home() {
   const [text, setText] = useState('');
   const [isLoading, setIsLoading] = useState(true);

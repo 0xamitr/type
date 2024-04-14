@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 
 export default function Login(){
     const router = useRouter()
-    let url = "http://127.0.0.1:5000/login"
+    let url = process.env.NEXT_PUBLIC_API + "/login"
     const handleSubmit = async(e: any)=> {
         e.preventDefault();
         let data = {

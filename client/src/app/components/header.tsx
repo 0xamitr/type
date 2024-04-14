@@ -20,7 +20,7 @@ export function Header(){
         };
 
         const checkLogin = async() =>{
-            const response = await fetch('http://127.0.0.1:5000/check-login', fetchOptions)
+            const response = await fetch(process.env.NEXT_PUBLIC_API + '/check-login', fetchOptions)
             const check = await response.json();
             if(check['logged_in'] == true)
                 setLoggedin(true)
