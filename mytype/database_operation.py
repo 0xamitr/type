@@ -121,8 +121,8 @@ def handle_submit(cur, connector, wpm, accuracy, email, iscode):
 
 
 def reset(cur, connector):
-    cur.excute('''SELECT * FROM users''')
-    cur.execute('''UPDATE users SET text_tests_today = %i, code_tests_today = %i, cumm_code_accuracy_today = %i, 
-        cumm_text_accuracy_today = %i, cumm_code_wpm_today = %i, cumm_text_wpm_today = %i, highest_text_accuracy_today = %i,
-        highest_code_wpm_today = %i, highest_code_accuracy_today = %i''',(0, 0, 0, 0, 0, 0, 0, 0, 0,))
+    cur.execute('''SELECT * FROM users''')
+    cur.execute('''UPDATE users SET text_tests_today = %s, code_tests_today = %s, cumm_code_accuracy_today = %s, 
+        cumm_text_accuracy_today = %s, cumm_code_wpm_today = %s, cumm_text_wpm_today = %s, highest_text_accuracy_today = %s,
+        highest_code_wpm_today = %s, highest_code_accuracy_today = %s, highest_text_wpm_today = %s''',(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,))
     connector.connection.commit()

@@ -142,12 +142,17 @@ def submit():
         app.logger.error("Unexpected error: {}".format(e))
         return jsonify({'error': 'Internal Server Error'}), 500
 
-@app.route('/reset')
+@app.route('/reset', methods=['GET'])
 def my_scheduled_job():
-    print('running cron job')
-    cur = mysql.connection.cursor()
-    reset(cur, mysql)
-    cur.close()
+    try:
+        print('running cron job')
+        cur = mysql.connection.cursor()
+        reset(cur, mysql)
+        cur.close()
+        return jsonify({"message": "ok"}), 200
+    except Exception as e:
+        app.logger.error("Unexpected error: {}".format(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
     
 if __name__ == '__main__':
     app.run(debug=True)
