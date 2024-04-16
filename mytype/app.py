@@ -9,11 +9,13 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_req
 from datetime import datetime, timedelta
 from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 from dotenv import load_dotenv
+from flask_mail import Mail, Message
 import os
 
 expiration_time = datetime.now() + timedelta(days=7)
 load_dotenv()
 app = Flask(__name__)
+mail = Mail(app)
 CORS(app, supports_credentials=True)
 
 app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
@@ -50,6 +52,7 @@ def insert():
         email = data['email']
         create_user(cur, mysql, name, password, email)
         cur.close()
+        # verify_email()
         return {'message': 'user created successfully'}, 200
     except Exception as e:
         return {'error': str(e)}, 400
