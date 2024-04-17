@@ -33,6 +33,8 @@ jwt = JWTManager(app)
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
+otpEmail = {}
+
 @app.route('/')
 def index():
     cur = mysql.connection.cursor()
@@ -45,17 +47,50 @@ def index():
 def insert():
     try:
         data = request.get_json()
-        cur = mysql.connection.cursor()
-        name = data['name']
-        print(name)
-        password = bcrypt.generate_password_hash(data['password'])
         email = data['email']
-        create_user(cur, mysql, name, password, email)
-        cur.close()
-        # verify_email()
-        return {'message': 'user created successfully'}, 200
+        username = data['name']
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT * FROM users WHERE username=%s''', (username,))
+        result = cur.fetchone()
+        if(result):
+            return {'exists':'Username already exists'}, 409
+        cur.execute('''SELECT * FROM users WHERE email=%s''', (email,))
+        result = cur.fetchone()
+        if(result):
+            return {'exists':'Email already exists'}, 409
+        
+        # email and username are unique
+
+        ##create token, send email,
+
+        ## return response so that user can input otp
+        return jsonify({"success": True, "message": {username: username, email: email}})
+
     except Exception as e:
         return {'error': str(e)}, 400
+    
+@app.route('/realregister', methods=['POST'])
+def realregister():
+    try:
+        data = request.get_json()
+        email = data['email']
+        username = data['name']
+        cur = mysql.connection.cursor()
+        
+        # verify token
+
+        # create user
+
+        # name = data['name']
+        # print(name)
+        # password = bcrypt.generate_password_hash(data['password'])
+        # email = data['email']
+        # create_user(cur, mysql, name, password, email)
+        # cur.close()
+        # # verify_email()
+        # return {'message': 'user created successfully'}, 200
+    except Exception as e:
+        return {'error': str(e)}, 400    
     
 @app.route('/login', methods=['POST'])
 def check():

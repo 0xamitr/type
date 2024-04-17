@@ -17,6 +17,8 @@ export default function SignUp(){
             body: JSON.stringify(data),
             credentials: 'include' as RequestCredentials,
         });
+        const res = await response.json()
+        console.log(res)
     }
     return(
         <>
