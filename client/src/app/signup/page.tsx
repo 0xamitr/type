@@ -19,6 +19,9 @@ export default function SignUp(){
         });
         const res = await response.json()
         console.log(res)
+        if(res.success){
+            //redirect
+        }
     }
     return(
         <>

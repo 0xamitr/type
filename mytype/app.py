@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, render_template
 from flask_mysqldb import MySQL
 from flask_cors import CORS
 from database_operation import create_user, handle_submit, reset
@@ -15,7 +15,6 @@ import os
 expiration_time = datetime.now() + timedelta(days=7)
 load_dotenv()
 app = Flask(__name__)
-mail = Mail(app)
 CORS(app, supports_credentials=True)
 
 app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
@@ -28,12 +27,19 @@ app.config['MYSQL_DB'] = os.getenv("MYSQL_DB")
 app.config['MYSQL_PORT'] = int(os.getenv("MYSQL_PORT"))
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['MYSQL_SSL_CA'] = '/path/to/your/ca/certificate.pem'
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'typetestme@gmail.com'
+app.config['MAIL_PASSWORD'] = os.getenv("APP_PASSWORD")
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 
+mail = Mail(app)
 jwt = JWTManager(app)
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
-otpEmail = {}
+otp_storage = {}
 
 @app.route('/')
 def index():
@@ -46,6 +52,7 @@ def index():
 @app.route('/register', methods=['POST'])
 def insert():
     try:
+        print("otp_storage", otp_storage)
         data = request.get_json()
         email = data['email']
         username = data['name']
@@ -54,6 +61,7 @@ def insert():
         result = cur.fetchone()
         if(result):
             return {'exists':'Username already exists'}, 409
+        
         cur.execute('''SELECT * FROM users WHERE email=%s''', (email,))
         result = cur.fetchone()
         if(result):
@@ -62,9 +70,17 @@ def insert():
         # email and username are unique
 
         ##create token, send email,
-
+        token = 1234
+        msg = Message("Hello",
+            sender="typetestme@gmail.com",
+            recipients=[email])
+        expiration_time = datetime.now() + timedelta(minutes=5)
+        otp_storage[email] = {'otp': token, 'expiration_time': expiration_time}
+        msg.html = render_template("confirm_email.html", token=token)
+        mail.send(msg)
+        
         ## return response so that user can input otp
-        return jsonify({"success": True, "message": {username: username, email: email}})
+        return jsonify({"success": True, "data": {username: username, email: email}})
 
     except Exception as e:
         return {'error': str(e)}, 400
@@ -73,22 +89,27 @@ def insert():
 def realregister():
     try:
         data = request.get_json()
-        email = data['email']
+        user_email = data['email']
+        user_otp = data['otp']
         username = data['name']
         cur = mysql.connection.cursor()
-        
+
         # verify token
+        if user_email in otp_storage:
+            current_time = datetime.now()
+            del otp_storage[user_email]
+            expired_emails = [email for email, data in otp_storage.items() if current_time > data['expiration_time']]
+            for email in expired_emails:
+                del otp_storage[email]
 
-        # create user
-
-        # name = data['name']
-        # print(name)
-        # password = bcrypt.generate_password_hash(data['password'])
-        # email = data['email']
-        # create_user(cur, mysql, name, password, email)
-        # cur.close()
-        # # verify_email()
-        # return {'message': 'user created successfully'}, 200
+            #create user
+            # password = bcrypt.generate_password_hash(data['password'])
+            # email = data['email']
+            # create_user(cur, mysql, username, password, email)
+            # cur.close()
+            # return {'message': 'user created successfully'}, 200
+        
+        cur.close()
     except Exception as e:
         return {'error': str(e)}, 400    
     
