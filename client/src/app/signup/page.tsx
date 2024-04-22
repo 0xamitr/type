@@ -1,13 +1,24 @@
 "use client"
+import { useState } from 'react'
 
 export default function SignUp(){
+    const [enterotp, setEnterotp] = useState(false)
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
     let url = process.env.NEXT_PUBLIC_API + "/register"
     const handleSubmit = async(e: any)=> {
         e.preventDefault();
+        const newUsername = e.target[0].value;
+        const newEmail = e.target[1].value;
+        const newPassword = e.target[2].value;
+        setUsername(newUsername);
+        setEmail(newEmail);
+        setPassword(newPassword);
         let data = {
-            name : e.target[0].value,
-            email: e.target[1].value,
-            password : e.target[2].value
+            name : newUsername,
+            email: newEmail,
+            password : newPassword
         }
         const response = await fetch(url, {
             method: "POST", 
@@ -20,27 +31,59 @@ export default function SignUp(){
         const res = await response.json()
         console.log(res)
         if(res.success){
-            //redirect
+            setEnterotp(true)
         }
+    }
+    const checkOtp = async(e:any) =>{
+        e.preventDefault();
+        let url = process.env.NEXT_PUBLIC_API + '/realregister'
+        let otp = e.target[0].value
+        let data = {
+            otp: otp,
+            name : username,
+            email: email,
+            password : password
+        }
+        console.log(data)
+        const response = await fetch(url, {
+            method: "POST", 
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+            credentials: 'include' as RequestCredentials,
+        });
+        console.log(response)
     }
     return(
         <>
             <div><h2>SignUp</h2></div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <p>UserName</p>
-                    <input type="text" required minLength={4} maxLength={20}/>
-                </label>
-                <label>
-                    <p>EMAIL</p>
-                    <input type="email" required/>
-                </label>
-                <label>
-                    <p>Password</p>
-                    <input type="password"required minLength={8} maxLength={20}/>
-                </label>
-                <input type="submit" />
-            </form>
+            {
+                !enterotp?
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        <p>UserName</p>
+                        <input type="text" required minLength={4} maxLength={20}/>
+                    </label>
+                    <label>
+                        <p>Email</p>
+                        <input type="email" required/>
+                    </label>
+                    <label>
+                        <p>Password</p>
+                        <input type="password"required minLength={8} maxLength={20}/>
+                    </label>
+                    <input type="submit" />
+                </form>
+                :
+                <form onSubmit={checkOtp}>
+                    <label>
+                        <p>OTP</p>
+                        <input type="number" required/>
+                    </label>
+                    <input type='submit' />
+                </form>
+            }
         </>
     )
 }

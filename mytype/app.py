@@ -11,6 +11,7 @@ from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 from dotenv import load_dotenv
 from flask_mail import Mail, Message
 import os
+import random
 
 expiration_time = datetime.now() + timedelta(days=7)
 load_dotenv()
@@ -52,6 +53,10 @@ def index():
 @app.route('/register', methods=['POST'])
 def insert():
     try:
+        current_time = datetime.now()
+        expired_emails = [email for email, data in otp_storage.items() if current_time > data['expiration_time']]
+        for email in expired_emails:
+            del otp_storage[email]
         print("otp_storage", otp_storage)
         data = request.get_json()
         email = data['email']
@@ -69,8 +74,9 @@ def insert():
         
         # email and username are unique
 
-        ##create token, send email,
-        token = 1234
+        #create token, send email
+        token = random.randint(1000, 9999)
+        print(token)
         msg = Message("Hello",
             sender="typetestme@gmail.com",
             recipients=[email])
@@ -80,7 +86,7 @@ def insert():
         mail.send(msg)
         
         ## return response so that user can input otp
-        return jsonify({"success": True, "data": {username: username, email: email}})
+        return jsonify({"success": True})
 
     except Exception as e:
         return {'error': str(e)}, 400
@@ -88,28 +94,42 @@ def insert():
 @app.route('/realregister', methods=['POST'])
 def realregister():
     try:
+        print("ok")
+        print("otp_storage", otp_storage)
         data = request.get_json()
         user_email = data['email']
         user_otp = data['otp']
         username = data['name']
         cur = mysql.connection.cursor()
+        current_time = datetime.now()
+        expired_emails = [email for email, data in otp_storage.items() if current_time > data['expiration_time']]
+        for email in expired_emails:
+            del otp_storage[email]
+        print("otp_storage after", otp_storage)
 
         # verify token
-        if user_email in otp_storage:
-            current_time = datetime.now()
-            del otp_storage[user_email]
-            expired_emails = [email for email, data in otp_storage.items() if current_time > data['expiration_time']]
-            for email in expired_emails:
-                del otp_storage[email]
+        print(user_email)
+        print("Keys in otp_storage:", otp_storage.keys())
 
-            #create user
-            # password = bcrypt.generate_password_hash(data['password'])
-            # email = data['email']
-            # create_user(cur, mysql, username, password, email)
-            # cur.close()
-            # return {'message': 'user created successfully'}, 200
-        
+        if user_email in otp_storage:
+            print(user_otp)
+            print(otp_storage[user_email]['otp'])
+            if int(user_otp) == otp_storage[user_email]['otp']:  # Corrected OTP comparison
+                print("faf")
+                #create user
+                password = bcrypt.generate_password_hash(data['password'])
+                email = data['email']
+                create_user(cur, mysql, username, password, email)
+                del otp_storage[user_email]  # Remove the used OTP
+                cur.close()
+                return {'message': 'user created successfully'}, 200
+            else:
+                return {'message': 'wrong otp'}, 403
+        else:
+            print("User email not found in otp_storage")
+
         cur.close()
+        return jsonify({"message": "email not found"}), 403
     except Exception as e:
         return {'error': str(e)}, 400    
     

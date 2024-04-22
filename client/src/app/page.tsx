@@ -9,11 +9,20 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [iscode, setIscode] = useState(false)
 
-  const handlesomething = ()=>{
-    fetch(process.env.NEXT_PUBLIC_API + "/reset", {
-      mode: 'no-cors' 
-
-    })
+  const handlesomething = async()=>{
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_API + '/logout', {
+        method: 'GET',
+        credentials: 'include', // Include cookies in the request
+      });
+      if (response.ok) {
+        console.log('Logout successful');
+      } else {
+        console.error('Logout failed');
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   }
   const handleClick = () => {
     setIscode(!iscode)
