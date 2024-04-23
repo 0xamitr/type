@@ -115,7 +115,6 @@ def realregister():
             print(user_otp)
             print(otp_storage[user_email]['otp'])
             if int(user_otp) == otp_storage[user_email]['otp']:  # Corrected OTP comparison
-                print("faf")
                 #create user
                 password = bcrypt.generate_password_hash(data['password'])
                 email = data['email']

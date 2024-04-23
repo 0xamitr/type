@@ -1,13 +1,17 @@
 "use client"
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function SignUp(){
     const [enterotp, setEnterotp] = useState(false)
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [timer, setTimer] = useState(300)
     const [email, setEmail] = useState('');
     let url = process.env.NEXT_PUBLIC_API + "/register"
+
     const handleSubmit = async(e: any)=> {
+        const router = useRouter()
         e.preventDefault();
         const newUsername = e.target[0].value;
         const newEmail = e.target[1].value;
@@ -32,6 +36,12 @@ export default function SignUp(){
         console.log(res)
         if(res.success){
             setEnterotp(true)
+            const store = setInterval(function() {
+                setTimer(prevTimer => prevTimer - 1)
+                if(timer < 1)
+                    router.push('/')
+                    clearInterval(store);
+            }, 1000);
         }
     }
     const checkOtp = async(e:any) =>{
@@ -54,6 +64,7 @@ export default function SignUp(){
             credentials: 'include' as RequestCredentials,
         });
         console.log(response)
+        
     }
     return(
         <>
@@ -82,6 +93,7 @@ export default function SignUp(){
                         <input type="number" required/>
                     </label>
                     <input type='submit' />
+                    <p>timer: {timer}</p>
                 </form>
             }
         </>
