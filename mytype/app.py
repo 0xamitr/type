@@ -121,14 +121,12 @@ def realregister():
                 create_user(cur, mysql, username, password, email)
                 del otp_storage[user_email]  # Remove the used OTP
                 cur.close()
-                return {'message': 'user created successfully'}, 200
+                return jsonify({'success': True, 'message': 'user created successfully'}), 200
             else:
-                return {'message': 'wrong otp'}, 403
-        else:
-            print("User email not found in otp_storage")
+                return jsonify({'success': False, 'message': 'wrong otp'}), 403
 
         cur.close()
-        return jsonify({"message": "email not found"}), 403
+        return jsonify({'success': False, "message": "email not found"}), 403
     except Exception as e:
         return {'error': str(e)}, 400    
     
@@ -219,6 +217,69 @@ def submit():
     except Exception as e:
         app.logger.error("Unexpected error: {}".format(e))
         return jsonify({'error': 'Internal Server Error'}), 500
+
+@app.route('/forgotpassword')
+def forgotpass():
+    try:
+        data = request.get_json()
+        email = data['email']
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT * FROM users WHERE email=%s''', (email,))
+        result = cur.fetchone()
+        if not result:
+            cur.close()
+            return {'success': False, 'mesasge':'Email does not  exists'}, 409
+        token = random.randint(1000, 9999)
+        print(token)
+        msg = Message("Hello",
+            sender="typetestme@gmail.com",
+            recipients=[email])
+        expiration_time = datetime.now() + timedelta(minutes=5)
+        otp_storage[email] = {'otp': token, 'expiration_time': expiration_time}
+        msg.html = render_template("confirm_email.html", token=token)
+        mail.send(msg)
+        
+        return jsonify({'success': True, "message": "ok"}), 200
+    except Exception as e:
+        return jsonify({'error': 'Internal Server Error'}), 500
+
+@app.route('/forgotpasswordotp')
+def forgotpassotp():
+    try:
+        data = request.get_json()
+        user_email = data['email']
+        user_otp = data['otp']
+        cur = mysql.connection.cursor()
+        current_time = datetime.now()
+        expired_emails = [email for email, data in otp_storage.items() if current_time > data['expiration_time']]
+        for email in expired_emails:
+            del otp_storage[email]
+
+        # verify token
+        if user_email in otp_storage:
+            if int(user_otp) == otp_storage[user_email]['otp']: 
+                return jsonify({'success': True, "message": "ok"}), 200
+        return jsonify({'success': False}), 400
+    except Exception as e:
+        return jsonify({'error': 'Internal Server Error'}), 500
+
+@app.route('/resetpassword')
+def resetpass():
+    try:
+        data = request.get_json()
+        email = data['email']
+        newpassword = data['password']
+        cur = mysql.connection.cursor()
+
+        cur.execute("UPDATE users SET password = %s WHERE email = %s", (new_password, email))
+        mysql.connection.commit()
+
+        cur.close()
+        return jsonify({'success': True})
+
+    except Exception as e:
+        return jsonify({'error': 'Internal Server Error'}), 500
+
 
 @app.route('/reset', methods=['GET'])
 def my_scheduled_job():

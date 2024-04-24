@@ -9,9 +9,9 @@ export default function SignUp(){
     const [timer, setTimer] = useState(300)
     const [email, setEmail] = useState('');
     let url = process.env.NEXT_PUBLIC_API + "/register"
+    const router = useRouter()
 
     const handleSubmit = async(e: any)=> {
-        const router = useRouter()
         e.preventDefault();
         const newUsername = e.target[0].value;
         const newEmail = e.target[1].value;
@@ -63,7 +63,12 @@ export default function SignUp(){
             body: JSON.stringify(data),
             credentials: 'include' as RequestCredentials,
         });
-        console.log(response)
+        const response_data = await response.json()
+        if(response_data.success)
+            router.push('/')
+        else{
+            console.log(response_data)
+        }
         
     }
     return(
