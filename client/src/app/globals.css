@@ -113,3 +113,39 @@ header{
   margin-left: 20vw;
   margin-right: 20vw;
 }
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background-color: transparent;
+  color: black;
+  padding: 8px 16px;
+  cursor: pointer;
+  border: none;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  z-index: 1;
+}
+
+.dropdown-content p {
+  margin: 0;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.dropdown-content p:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}

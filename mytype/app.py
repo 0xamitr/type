@@ -218,7 +218,7 @@ def submit():
         app.logger.error("Unexpected error: {}".format(e))
         return jsonify({'error': 'Internal Server Error'}), 500
 
-@app.route('/forgotpassword')
+@app.route('/forgotpassword', methods=['POST'])
 def forgotpass():
     try:
         data = request.get_json()
@@ -243,13 +243,12 @@ def forgotpass():
     except Exception as e:
         return jsonify({'error': 'Internal Server Error'}), 500
 
-@app.route('/forgotpasswordotp')
+@app.route('/forgotpasswordotp', methods=['POST'])
 def forgotpassotp():
     try:
         data = request.get_json()
         user_email = data['email']
         user_otp = data['otp']
-        cur = mysql.connection.cursor()
         current_time = datetime.now()
         expired_emails = [email for email, data in otp_storage.items() if current_time > data['expiration_time']]
         for email in expired_emails:
@@ -263,19 +262,19 @@ def forgotpassotp():
     except Exception as e:
         return jsonify({'error': 'Internal Server Error'}), 500
 
-@app.route('/resetpassword')
+@app.route('/resetpassword', methods=['POST'])
 def resetpass():
     try:
         data = request.get_json()
         email = data['email']
-        newpassword = data['password']
         cur = mysql.connection.cursor()
+        password = bcrypt.generate_password_hash(data['password'])
 
-        cur.execute("UPDATE users SET password = %s WHERE email = %s", (new_password, email))
+        cur.execute("UPDATE users SET password = %s WHERE email = %s", (password, email))
         mysql.connection.commit()
 
         cur.close()
-        return jsonify({'success': True})
+        return jsonify({'success': True}), 200
 
     except Exception as e:
         return jsonify({'error': 'Internal Server Error'}), 500

@@ -1,18 +1,25 @@
 export default function Logout(){
     const logout = async() =>{
-        const fetchOptions = {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_API + '/logout', {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include' as RequestCredentials,
-          withCredentials: true,
-        };
-    
-        fetch(process.env.NEXT_PUBLIC_API + '/logout', fetchOptions)
-        window.dispatchEvent(new Event('logout'));
+          credentials: 'include', // Include cookies in the request
+        });
+        if (response.ok) {
+          console.log('Logout successful');
+        } 
+        else {
+          console.error('Logout failed');
+        }
+      } 
+      catch (error) {
+        console.error('Error during logout:', error);
+      }
+      window.dispatchEvent(new Event('logout'));
     }
     return(
-        <button onClick={logout}>LOGOUT</button>
+        <div onClick={logout}>
+          <p>Logout</p>
+        </div>
     )
 }

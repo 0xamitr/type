@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import icon from "../../../public/typing-icon.svg"
-import Logout from './logout';
+import DropdownMenu from './dropdown';
 import { useEffect, useState } from "react"
 import Link from "next/link"
 
@@ -53,7 +53,8 @@ export function Header(){
             {showlogin && 
                 <div className="right">
                     {loggedin ?
-                        <Link href={"/profile"}>Profile</Link>:
+                        <DropdownMenu />
+                        :
                         <Link href={"/login"}>Login</Link>
                     }
                 </div>
