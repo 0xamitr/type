@@ -1,5 +1,6 @@
 "use client"
 import { useRouter } from 'next/navigation'
+import Link from 'next/link';
 
 export default function Login(){
     const router = useRouter()
@@ -37,6 +38,8 @@ export default function Login(){
                 </label>
                 <input type="submit" />
             </form>
+            <Link href={'/signup'}>No account? Sign Up</Link>
+            <Link href={'/forgotpassword'}>forgot password?</Link>
         </>
     )
 }
