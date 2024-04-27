@@ -38,7 +38,7 @@ export default function Login(){
                 </label>
                 <input type="submit" />
             </form>
-            <Link href={'/signup'}>No account? Sign Up</Link>
+            <Link href={'/signup'}>No account? Sign Up <br /></Link>
             <Link href={'/forgotpassword'}>forgot password?</Link>
         </>
     )
