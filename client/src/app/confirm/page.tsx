@@ -1,4 +1,4 @@
-export default function confirm(){
+export default function Confirm(){
     return(
         <>
             <form>

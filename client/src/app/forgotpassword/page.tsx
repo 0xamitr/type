@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-export default function forgotpassword(){
+export default function Forgotpassword(){
     const [isotp, setIsotp] = useState(true)
     const [beg, setBeg] = useState(true)
     const [emailstate, setEmailstate] = useState("")
