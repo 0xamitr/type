@@ -70,7 +70,7 @@ export default function Forgotpassword(){
                     <label>
                         <input type="email"/>
                     </label>
-                    <input type="submit"/>
+                    <button type='submit'>Submit</button>
                 </form>
                 :
                     isotp?
@@ -79,7 +79,7 @@ export default function Forgotpassword(){
                         <label>
                             <input type="text"/>
                         </label>
-                        <input type="submit"/>
+                        <button type='submit'>Submit</button>
                     </form>
                     :
                     <form onSubmit={handlePasssubmit}>
@@ -87,7 +87,7 @@ export default function Forgotpassword(){
                         <label>
                             <input type="text"/>
                         </label>
-                        <input type="submit"/>
+                        <button type='submit'>Submit</button>
                     </form>
             }
         </>

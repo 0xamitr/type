@@ -1,7 +1,6 @@
 "use client"
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link';
 
 export default function SignUp(){
     const [enterotp, setEnterotp] = useState(false)
@@ -90,7 +89,7 @@ export default function SignUp(){
                         <p>Password</p>
                         <input type="password"required minLength={8} maxLength={20}/>
                     </label>
-                    <input type="submit" />
+                    <button type='submit'>Submit</button>
                 </form>
                 :
                 <form onSubmit={checkOtp}>
@@ -98,11 +97,10 @@ export default function SignUp(){
                         <p>OTP</p>
                         <input type="number" required/>
                     </label>
-                    <input type='submit' />
+                    <button type='submit'>Submit</button>
                     <p>timer: {timer}</p>
                 </form>
             }
-            <Link href={'/forgotpassword'}>forgot password?</Link>
         </>
     )
 }

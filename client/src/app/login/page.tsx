@@ -36,10 +36,10 @@ export default function Login(){
                     <p>Password</p>
                     <input type="password"/>
                 </label>
-                <input type="submit" />
+                <button type='submit'>Submit</button>
+                <Link href={'/signup'}>No account? Sign Up <br /></Link>
+                <Link href={'/forgotpassword'}>forgot password?</Link>
             </form>
-            <Link href={'/signup'}>No account? Sign Up <br /></Link>
-            <Link href={'/forgotpassword'}>forgot password?</Link>
         </>
     )
 }
