@@ -1,4 +1,4 @@
-.typed {
+.typed{
   color: grey;
 }
 
@@ -17,37 +17,11 @@
 }
 
 .container {
-  position: absolute;
-  right: 20vw;
-  top: 10vh;
-  height: 20px;
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.switch {
-  display: inline-block;
-  position: relative;
-  width: 50px;
-  height: 20px;
-  background-color: #ccc;
-  border-radius: 10px;
-}
-
-.switch div {
-  position: absolute;
-  left: 2px;
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  border-radius: 50%;
-  transition: transform 0.3s ease;
-}
-
-.switch.checked div {
-  transform: translateX(26px);
-  background-color: black;
+  margin-left: auto;
+  width: fit-content;
 }
 
 #text{
@@ -69,13 +43,14 @@ main{
 }
 
 .left{
-  padding-left: 10px;
+  padding-left: 5vw;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
 header{
+  height: 10vh;
   display: flex;
   justify-content: space-between;
 }
@@ -135,6 +110,9 @@ header{
   padding: 8px 16px;
   cursor: pointer;
   border: none;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .dropdown-content {
@@ -160,7 +138,7 @@ header{
   display: block;
 }
 
-#test{
+.test{
   font-size: calc(15px + 0.390625vw);
 }
 
@@ -182,7 +160,6 @@ form {
   max-width: 100%;
 }
 
-/* Style form elements */
 label {
   display: block;
   margin-bottom: 8px;
@@ -214,4 +191,44 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.switch {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 0;
+}
+
+.switch div {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.switch.checked {
+  background-color: #2196F3;
+}
+
+.switch.checked div {
+  transform: translateX(20px);
+}
+
+#p{
+  margin: 0;
+}
+
+
+.formhead{
+  text-align: center;
 }

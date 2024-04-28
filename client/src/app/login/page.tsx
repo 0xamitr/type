@@ -26,8 +26,8 @@ export default function Login(){
     }
     return(
         <>
-            <div><h2>LOGIN</h2></div>
             <form onSubmit={handleSubmit}>
+                <h2 className='formhead'>LOGIN</h2>
                 <label >
                     <p>Email</p>
                     <input type="email"/>
@@ -36,9 +36,9 @@ export default function Login(){
                     <p>Password</p>
                     <input type="password"/>
                 </label>
-                <button type='submit'>Submit</button>
-                <Link href={'/signup'}>No account? Sign Up <br /></Link>
-                <Link href={'/forgotpassword'}>forgot password?</Link>
+                <button type='submit'>LOGIN</button>
+                <Link href={'/signup'}><p>No account? Sign Up</p></Link>
+                <Link href={'/forgotpassword'}><p>forgot password?</p></Link>
             </form>
         </>
     )

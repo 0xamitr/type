@@ -46,6 +46,10 @@ export default function Profile(){
                             <p>Accuracy Today</p>
                         </div>
                         <div className="box">
+                            <p>{((data.text_data.cumm_text_wpm_today) / data.text_data.text_tests_today).toFixed(2)}</p>
+                            <p>Average WPM Today</p>
+                        </div>
+                        <div className="box">
                             <p>{(data.text_data.highest_text_wpm_today).toFixed(2)}</p>
                             <p>Highest WPM Today</p>
                         </div>
@@ -62,7 +66,7 @@ export default function Profile(){
                         </div>
                         <div className="box">
                             <p>{((data.text_data.cumm_text_wpm) / data.text_data.text_tests).toFixed(2)}</p>
-                            <p>Overall WPM</p>
+                            <p>Average WPM</p>
                         </div>
                         <div className="box">
                             <p>{(data.text_data.highest_text_wpm_ever).toFixed(2)}</p>
@@ -81,6 +85,10 @@ export default function Profile(){
                             <p>Accuracy Today</p>
                         </div>
                         <div className="box">
+                            <p>{((data.code_data.cumm_code_wpm_today) / data.code_data.code_tests_today).toFixed(2)}</p>
+                            <p>Average WPM Today</p>
+                        </div>
+                        <div className="box">
                             <p>{(data.code_data.highest_code_wpm_today).toFixed(2)}</p>
                             <p>Highest WPM Today</p>
                         </div>
@@ -93,11 +101,11 @@ export default function Profile(){
                         </div>
                         <div className="box">
                             <p>{((data.code_data.cumm_code_accuracy) / data.code_data.code_tests).toFixed(2)}</p>
-                            <p>Overall Accuracy</p>
+                            <p>Average Accuracy</p>
                         </div>
                         <div className="box">
                             <p>{((data.code_data.cumm_code_wpm) / data.code_data.code_tests).toFixed(2)}</p>
-                            <p>Overall WPM</p>
+                            <p>Average WPM</p>
                         </div>
                         <div className="box">
                             <p>{(data.code_data.highest_code_wpm_ever).toFixed(2)}</p>

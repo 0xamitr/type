@@ -66,7 +66,7 @@ export default function Forgotpassword(){
             {
                 beg?
                 <form onSubmit={handleEmailsubmit}>
-                    <h2>EMAIL</h2>
+                    <h2 className='formhead'>ForgotPassword password? Enter email</h2>
                     <label>
                         <input type="email"/>
                     </label>
@@ -75,6 +75,7 @@ export default function Forgotpassword(){
                 :
                     isotp?
                     <form onSubmit={handleOtpsubmit}>
+                        <h2 className='formhead'>Enter OTP</h2>
                         <h2>OTP</h2>
                         <label>
                             <input type="text"/>
@@ -83,7 +84,7 @@ export default function Forgotpassword(){
                     </form>
                     :
                     <form onSubmit={handlePasssubmit}>
-                        <h2>NEW PASSWORD</h2>
+                        <h2 className='formhead'>New Password</h2>
                         <label>
                             <input type="text"/>
                         </label>

@@ -50,7 +50,7 @@ function generateMainFunction() {
 export default function randomCode() {
     let code = '';
     code += generateMainFunction();
-    const numFunctions = Math.floor(Math.random() * 3) + 1;
+    const numFunctions = Math.floor(Math.random() * 1) + 1;
     for (let i = 0; i < numFunctions; i++)
         code += generateFunction()
     console.log(code)

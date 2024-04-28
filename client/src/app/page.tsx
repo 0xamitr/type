@@ -27,13 +27,13 @@ export default function Home() {
 
   return (
     <>
-      <div className="container">
-        <p>Code(beta)</p>
-        <label onClick={handleClick} className={`switch ${iscode ? 'checked' : ''}`}>
-          <div></div>
-        </label>
-      </div>
       <div id='text'>
+        <div className="container">
+          <h3 id = "p" className='test'>Code (Beta)</h3>
+          <label onClick={handleClick} className={`switch ${iscode ? 'checked' : ''}`}>
+            <div></div>
+          </label>
+        </div>
         {isLoading ? (
           <p>Loading...</p>
         ) : (

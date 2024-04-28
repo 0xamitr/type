@@ -292,5 +292,19 @@ def my_scheduled_job():
         app.logger.error("Unexpected error: {}".format(e))
         return jsonify({'error': 'Internal Server Error'}), 500
     
+@jwt_required
+@app.route('/getuser')
+def getUser():
+    try:
+        verify_jwt_in_request()
+        email = get_jwt_identity()
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT username FROM users WHERE email = %s'''
+        , [email])
+        username = cur.fetchone()
+        return jsonify({'success': True, 'username': username})
+    except Exception as e:
+        return jsonify({'error': 'Internal Server Error'}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)

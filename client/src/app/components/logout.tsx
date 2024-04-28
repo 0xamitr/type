@@ -1,4 +1,7 @@
+import { useRouter } from "next/navigation";
+
 export default function Logout(){
+  const router = useRouter()
     const logout = async() =>{
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_API + '/logout', {
@@ -7,6 +10,8 @@ export default function Logout(){
         });
         if (response.ok) {
           console.log('Logout successful');
+          router.push('/')
+          window.dispatchEvent(new Event('logout'));
         } 
         else {
           console.error('Logout failed');
@@ -15,7 +20,6 @@ export default function Logout(){
       catch (error) {
         console.error('Error during logout:', error);
       }
-      window.dispatchEvent(new Event('logout'));
     }
     return(
         <div onClick={logout}>

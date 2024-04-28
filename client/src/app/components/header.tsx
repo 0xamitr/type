@@ -18,7 +18,6 @@ export function Header(){
             credentials: 'include' as RequestCredentials,
             withCredentials: true,
         };
-
         const checkLogin = async() =>{
             const response = await fetch(process.env.NEXT_PUBLIC_API + '/check-login', fetchOptions)
             const check = await response.json();
@@ -48,14 +47,14 @@ export function Header(){
         <header>
             <Link href='/' className="left">
                 <Image className="logo" src={icon} alt="keyboard logo"></Image>
-                <h2>TYPE</h2>
+                <h1>TYPE</h1>
             </Link>
             {showlogin && 
                 <div className="right">
                     {loggedin ?
                         <DropdownMenu />
                         :
-                        <Link href={"/login"}>Login</Link>
+                        <Link href={"/login"}><h2>Login</h2></Link>
                     }
                 </div>
             }

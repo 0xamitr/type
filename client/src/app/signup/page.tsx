@@ -73,10 +73,10 @@ export default function SignUp(){
     }
     return(
         <>
-            <div><h2>SignUp</h2></div>
             {
                 !enterotp?
                 <form onSubmit={handleSubmit}>
+                    <h2 className='formhead'>SIGN UP</h2>
                     <label>
                         <p>UserName</p>
                         <input type="text" required minLength={4} maxLength={20}/>
@@ -89,15 +89,16 @@ export default function SignUp(){
                         <p>Password</p>
                         <input type="password"required minLength={8} maxLength={20}/>
                     </label>
-                    <button type='submit'>Submit</button>
+                    <button type='submit'>Sign Up</button>
                 </form>
                 :
                 <form onSubmit={checkOtp}>
+                    <h2 className='formhead'>Enter OTP</h2>
                     <label>
                         <p>OTP</p>
                         <input type="number" required/>
                     </label>
-                    <button type='submit'>Submit</button>
+                    <button type='submit'>Sign Up</button>
                     <p>timer: {timer}</p>
                 </form>
             }

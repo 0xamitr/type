@@ -80,7 +80,7 @@ export default function Text(props: any) {
 
     return (
         <>
-            <p id='test'>
+            <p className='test'>
                 {Array.from(text).map((letter: String) => {
                     setindex++
                     let wtf = ""
