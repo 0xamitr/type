@@ -1,6 +1,10 @@
 "use client"
+import styles from './styles.module.css'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link';
+import CustomForm from './../components/form'
+import CustomInput from './../components/input'
+import CustomButton from './../components/button'
 
 export default function Login(){
     const router = useRouter()
@@ -26,20 +30,23 @@ export default function Login(){
     }
     return(
         <>
-            <form onSubmit={handleSubmit}>
+            <CustomForm onSubmit={handleSubmit}>
                 <h2 className='formhead'>LOGIN</h2>
-                <label >
-                    <p>Email</p>
-                    <input type="email"/>
-                </label>
-                <label>
-                    <p>Password</p>
-                    <input type="password"/>
-                </label>
-                <button type='submit'>LOGIN</button>
+                <CustomInput
+                    inputheading={"Email"}
+                    inputtype={"email"}
+                />
+                <CustomInput
+                    inputheading={"Password"}
+                    inputtype={"password"}
+                />
+                <CustomButton 
+                    type='submit'
+                    text='Login'
+                />
                 <Link href={'/signup'}><p>No account? Sign Up</p></Link>
                 <Link href={'/forgotpassword'}><p>forgot password?</p></Link>
-            </form>
+            </CustomForm>
         </>
     )
 }

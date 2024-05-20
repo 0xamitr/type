@@ -2,6 +2,9 @@
 
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import CustomForm from "../components/form"
+import CustomInput from "../components/input"
+import CustomButton from "../components/button"
 
 export default function Forgotpassword(){
     const [isotp, setIsotp] = useState(true)
@@ -10,6 +13,7 @@ export default function Forgotpassword(){
     const url = process.env.NEXT_PUBLIC_API
     const router = useRouter()
     const handleEmailsubmit = async(e: any) =>{
+        console.log("ok")
         e.preventDefault();
         const email = e.target[0].value
         const data = {
@@ -65,31 +69,42 @@ export default function Forgotpassword(){
         <>
             {
                 beg?
-                <form onSubmit={handleEmailsubmit}>
-                    <h2 className='formhead'>ForgotPassword password? Enter email</h2>
-                    <label>
-                        <input type="email"/>
-                    </label>
-                    <button type='submit'>Submit</button>
-                </form>
+                <CustomForm onSubmit={handleEmailsubmit}>
+                    <h2 className='formhead'>Forgot Password?</h2>
+                    <CustomInput 
+                        inputheading="Email"
+                        type="email"
+                    />
+                    <CustomButton 
+                        type='submit' 
+                        text='Submit'
+                    />
+                </CustomForm>
                 :
                     isotp?
-                    <form onSubmit={handleOtpsubmit}>
+                    <CustomForm onSubmit={handleOtpsubmit}>
                         <h2 className='formhead'>Enter OTP</h2>
-                        <h2>OTP</h2>
-                        <label>
-                            <input type="text"/>
-                        </label>
-                        <button type='submit'>Submit</button>
-                    </form>
+                        <CustomInput
+                            inputheading="OTP"
+                            type="text"
+                        />
+                        <CustomButton
+                            type="Submit" 
+                            text="Submit"
+                        />
+                    </CustomForm>
                     :
-                    <form onSubmit={handlePasssubmit}>
+                    <CustomForm onSubmit={handlePasssubmit}>
                         <h2 className='formhead'>New Password</h2>
-                        <label>
-                            <input type="text"/>
-                        </label>
-                        <button type='submit'>Submit</button>
-                    </form>
+                        <CustomInput
+                            inputheading="New Password"
+                            type="password"
+                        />
+                        <CustomButton
+                            type="Submit" 
+                            text="Change Password"
+                        />
+                    </CustomForm>
             }
         </>
     )

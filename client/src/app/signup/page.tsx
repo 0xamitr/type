@@ -1,6 +1,9 @@
 "use client"
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import CustomForm from './../components/form'
+import CustomInput from './../components/input'
+import CustomButton from './../components/button'
 
 export default function SignUp(){
     const [enterotp, setEnterotp] = useState(false)
@@ -75,32 +78,45 @@ export default function SignUp(){
         <>
             {
                 !enterotp?
-                <form onSubmit={handleSubmit}>
+                <CustomForm onSubmit={handleSubmit}>
                     <h2 className='formhead'>SIGN UP</h2>
-                    <label>
-                        <p>UserName</p>
-                        <input type="text" required minLength={4} maxLength={20}/>
-                    </label>
-                    <label>
-                        <p>Email</p>
-                        <input type="email" required/>
-                    </label>
-                    <label>
-                        <p>Password</p>
-                        <input type="password"required minLength={8} maxLength={20}/>
-                    </label>
-                    <button type='submit'>Sign Up</button>
-                </form>
+                    <CustomInput 
+                        inputheading="Username"
+                        type="text"
+                        required="required"
+                        minLength={4} 
+                        maxLength={20}
+                    />
+                     <CustomInput 
+                        inputheading="Email"
+                        type="email"
+                        required="required"                   
+                    />
+                     <CustomInput 
+                        inputheading="Password"
+                        type="password"
+                        required minLength={8} 
+                        maxLength={20}
+                    />
+                    <CustomButton 
+                        type="submit"
+                        text="Sign Up"
+                    />
+                </CustomForm>
                 :
-                <form onSubmit={checkOtp}>
+                <CustomForm onSubmit={checkOtp}>
                     <h2 className='formhead'>Enter OTP</h2>
-                    <label>
-                        <p>OTP</p>
-                        <input type="number" required/>
-                    </label>
-                    <button type='submit'>Sign Up</button>
+                    <CustomInput 
+                        inputheading="OTP"
+                        type="number"
+                        required
+                    />
+                    <CustomButton 
+                        type="submit"
+                        text="Sign Up"
+                    />
                     <p>timer: {timer}</p>
-                </form>
+                </CustomForm>
             }
         </>
     )
