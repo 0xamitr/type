@@ -44,7 +44,8 @@ export default function Text(props: any) {
                 temp++
             }
             if (event.key == text[index] || (text[index] == "↵" && event.key == "Enter")) {
-                document.querySelector(styles.current)?.classList.remove(styles.current)
+                document.querySelector(`.${styles.current}`)?.classList.remove(styles.current);
+                console.log(document.querySelector(styles.current))
                 if(document.getElementById(`${index+2}`)?.textContent == "    "){
                     index++
                 }
