@@ -1,23 +1,9 @@
 body{
   background-color: #FAFAFA ;
 }
-.typed{
-  color: grey;
-}
 
-.wrong{
-  color: red;
-}
 
-.current {
-  animation: animate-bg 1s infinite;
-}
 
-@keyframes animate-bg {
-  0% {background-color: transparent;}
-  50% {background-color: grey;}
-  0% {background-color: transparent;}
-}
 
 .container {
   display: flex;
@@ -141,9 +127,6 @@ header{
   display: block;
 }
 
-.test{
-  font-size: calc(15px + 0.390625vw);
-}
 
 a{
   text-decoration: none;

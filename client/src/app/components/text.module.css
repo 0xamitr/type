@@ -1,0 +1,21 @@
+.test{
+    font-size: calc(15px + 0.390625vw);
+}
+
+.current {
+    animation: animate-bg 1s infinite;
+}
+
+@keyframes animate-bg {
+    0% {background-color: transparent;}
+    50% {background-color: grey;}
+    0% {background-color: transparent;}
+}
+
+.typed{
+    color: grey;
+}
+
+.wrong{
+    color: red;
+}

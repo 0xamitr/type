@@ -1,4 +1,5 @@
 'use client'
+import styles from './text.module.css'
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import React from 'react'
@@ -43,17 +44,17 @@ export default function Text(props: any) {
                 temp++
             }
             if (event.key == text[index] || (text[index] == "↵" && event.key == "Enter")) {
-                document.querySelector(".current")?.classList.remove("current")
+                document.querySelector(styles.current)?.classList.remove(styles.current)
                 if(document.getElementById(`${index+2}`)?.textContent == "    "){
                     index++
                 }
                 index++
-                document.getElementById(`${index}`)?.classList.add("typed")
-                document.getElementById(`${index+1}`)?.classList.add("current")
+                document.getElementById(`${index}`)?.classList.add(styles.typed)
+                document.getElementById(`${index+1}`)?.classList.add(styles.current)
             }
             else{
-                if(!document.getElementById(`${index+1}`)?.classList.contains("wrong")){
-                    document.getElementById(`${index+1}`)?.classList.add("wrong")
+                if(!document.getElementById(`${index+1}`)?.classList.contains(styles.wrong)){
+                    document.getElementById(`${index+1}`)?.classList.add(styles.wrong)
                     wrongvar++;
                 }
             }
@@ -80,12 +81,12 @@ export default function Text(props: any) {
 
     return (
         <>
-            <p className='test'>
+            <p className={styles.test}>
                 {Array.from(text).map((letter: String) => {
                     setindex++
                     let wtf = ""
                     if(setindex == 1)
-                        wtf = "current"
+                        wtf = styles.current
                     return (
                         <React.Fragment key={uuidv4()}> 
                             <span id={`${setindex}`} className={wtf}>
