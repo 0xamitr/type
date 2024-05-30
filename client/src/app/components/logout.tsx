@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import styles from "./logout.module.css"
 
 export default function Logout(){
   const router = useRouter()
@@ -23,7 +24,7 @@ export default function Logout(){
     }
     return(
         <div onClick={logout}>
-          <p>Logout</p>
+          <p className={styles.p}>Logout</p>
         </div>
     )
 }

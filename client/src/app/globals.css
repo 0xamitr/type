@@ -4,90 +4,14 @@ body{
 
 
 
-
-.container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: auto;
-  width: fit-content;
-}
-
-#text{
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40vw;
-}
-
 main{
   min-height: 80vh;
 }
 
-@media screen and (max-width: 800px){
-  #text{
-    width: 60vw;
-  }
-}
 
-.left{
-  padding-left: 5vw;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 
-header{
-  height: 10vh;
-  display: flex;
-  justify-content: space-between;
-}
 
-.right{
-  display: flex;
-  padding-right: 10vw;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.logo{
-  height: 50px;
-  width: auto;
-}
-
-.profile-text{
-  display: flex;
-  justify-content: space-between;
-}
-
-.profile-code{
-  display: flex;
-  justify-content: space-between;
-}
-
-.box{
-  height: 15vh;
-  width: 25vh;
-  border: solid 1px black;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.profile-center{
-  display: flex;
-  justify-content: center;
-}
-
-.profile{
-  margin-left: 20vw;
-  margin-right: 20vw;
-}
-
+/* 
 .dropdown {
   position: relative;
   display: inline-block;
@@ -125,7 +49,7 @@ header{
 
 .dropdown:hover .dropdown-content {
   display: block;
-}
+} */
 
 
 a{
@@ -133,42 +57,10 @@ a{
   color: inherit;
 }
 
-.switch {
-  display: inline-block;
-  position: relative;
-  width: 40px;
-  height: 20px;
-  background-color: #ccc;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin: 0;
-}
 
-.switch div {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 16px;
-  height: 16px;
-  background-color: white;
-  border-radius: 50%;
-  transition: transform 0.3s;
-}
-
-.switch.checked {
-  background-color: #2196F3;
-}
-
-.switch.checked div {
-  transform: translateX(20px);
-}
 
 #p{
   margin: 0;
 }
 
 
-.formhead{
-  text-align: center;
-}

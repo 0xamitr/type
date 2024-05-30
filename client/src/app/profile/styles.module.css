@@ -1,0 +1,31 @@
+.profiletext{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .profilecode{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .box{
+    height: 15vh;
+    width: 25vh;
+    border: solid 1px black;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .profilecenter{
+    display: flex;
+    justify-content: center;
+  }
+  
+  .profile{
+    margin-left: 20vw;
+    margin-right: 20vw;
+  }
+  

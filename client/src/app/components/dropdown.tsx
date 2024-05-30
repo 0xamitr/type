@@ -3,6 +3,7 @@ import Image from "next/image"
 import Logout from './logout';
 import { useEffect, useState } from 'react';
 import icon from "../../../public/usericon.png"
+import styles from "./dropdown.module.css"
 
 const DropdownMenu = () => {
   const [username, setUsername] = useState<string>("")
@@ -26,14 +27,14 @@ const DropdownMenu = () => {
   }, [])
 
   return (
-    <div className="dropdown">
-      <div className="dropbtn">
+    <div className={styles.dropdown}>
+      <div className={styles.dropbtn}>
         {/* <Image className="logo" src={icon} alt="keyboard logo"></Image> */}
         <h2>{username}</h2>
       </div>
-      <div className="dropdown-content">
+      <div className={styles.dropdowncontent}>
         <Link href="/profile">
-          <p>Profile</p>
+          <p className={styles.p}>Profile</p>
         </Link>
         <Logout />
       </div>

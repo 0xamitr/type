@@ -18,29 +18,8 @@
     color: #333;
   }
   
-.input, .select, .textarea {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-    box-sizing: border-box;
-  }
+
+
   
-.formbtn {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-.formbtn:hover {
-    background-color: #0056b3;
-  }
+
    */

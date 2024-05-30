@@ -13,7 +13,6 @@ export default function Forgotpassword(){
     const url = process.env.NEXT_PUBLIC_API
     const router = useRouter()
     const handleEmailsubmit = async(e: any) =>{
-        console.log("ok")
         e.preventDefault();
         const email = e.target[0].value
         const data = {

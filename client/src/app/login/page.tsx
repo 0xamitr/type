@@ -33,12 +33,12 @@ export default function Login(){
             <CustomForm onSubmit={handleSubmit}>
                 <h2 className='formhead'>LOGIN</h2>
                 <CustomInput
-                    inputheading={"Email"}
-                    inputtype={"email"}
+                    inputheading="Email"
+                    type="email"
                 />
                 <CustomInput
-                    inputheading={"Password"}
-                    inputtype={"password"}
+                    inputheading="Password"
+                    type="password"
                 />
                 <CustomButton 
                     type='submit'

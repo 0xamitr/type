@@ -3,7 +3,8 @@ import Text from './components/text';
 import randomText from './Features/RandomText';
 import randomCode from './Features/RandomCode'
 import { useEffect, useState } from 'react';
-
+import styles from "./styles.module.css"
+import Label from "./components/label"
 export default function Home() {
   const [text, setText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -27,13 +28,8 @@ export default function Home() {
 
   return (
     <>
-      <div id='text'>
-        <div className="container">
-          <h3 id = "p" className='test'>Code (Beta)</h3>
-          <label onClick={handleClick} className={`switch ${iscode ? 'checked' : ''}`}>
-            <div></div>
-          </label>
-        </div>
+      <div id={styles.text}>
+      <Label iscode={iscode} setIscode={setIscode}/>
         {isLoading ? (
           <p>Loading...</p>
         ) : (

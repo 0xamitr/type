@@ -1,0 +1,39 @@
+.switch {
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 0;
+  }
+  
+  .switch div {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+  }
+  
+  .switch.checked {
+    background-color: #2196F3;
+  }
+  
+  .switch.checked div {
+    transform: translateX(20px);
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    width: fit-content;
+  }
+  

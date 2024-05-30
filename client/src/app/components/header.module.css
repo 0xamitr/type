@@ -1,0 +1,25 @@
+.left{
+    padding-left: 5vw;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  #header{
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .right{
+    display: flex;
+    padding-right: 10vw;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+.logo{
+    height: 50px;
+    width: auto;
+  }

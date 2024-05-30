@@ -1,0 +1,14 @@
+
+  #text{
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40vw;
+  }
+
+  @media screen and (max-width: 800px){
+    #text{
+      width: 60vw;
+    }
+  }

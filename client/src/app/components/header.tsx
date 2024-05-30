@@ -4,7 +4,7 @@ import icon from "../../../public/typing-icon.svg"
 import DropdownMenu from './dropdown';
 import { useEffect, useState } from "react"
 import Link from "next/link"
-
+import styles from "./header.module.css"
 
 export function Header(){
     const [loggedin, setLoggedin] = useState(false)
@@ -44,13 +44,13 @@ export function Header(){
         setLoggedin(false);
     }
     return(
-        <header>
-            <Link href='/' className="left">
-                <Image className="logo" src={icon} alt="keyboard logo"></Image>
+        <header id={styles.header}>
+            <Link href='/' className={styles.left}>
+                <Image className={styles.logo} src={icon} alt="keyboard logo"></Image>
                 <h1>TYPE</h1>
             </Link>
             {showlogin && 
-                <div className="right">
+                <div className={styles.right}>
                     {loggedin ?
                         <DropdownMenu />
                         :
