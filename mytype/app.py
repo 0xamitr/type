@@ -10,13 +10,19 @@ from datetime import datetime, timedelta
 from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 from dotenv import load_dotenv
 from flask_mail import Mail, Message
+from flask_socketio import SocketIO
 import os
 import random
+from flask_socketio import join_room, leave_room
+from flask_socketio import send, emit
+from flask_socketio import disconnect 
+
 
 expiration_time = datetime.now() + timedelta(days=7)
 load_dotenv()
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
@@ -41,6 +47,9 @@ mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
 otp_storage = {}
+room_storage = {}
+socket_to_room = {}
+socket_to_username = {}
 
 @app.route('/')
 def index():
@@ -306,5 +315,112 @@ def getUser():
     except Exception as e:
         return jsonify({'error': 'Internal Server Error'}), 500
 
+
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+
+@socketio.on('create-room')
+def handle_room_creation(data):
+    socket_to_username[request.sid] = data['username']
+    username = data['username']
+    room_name = str(random.randint(1000, 9999))
+    namespace = '/'
+    room_exists = room_name in socketio.server.manager.rooms.get(namespace, {})
+    join_room(room_name)
+    if(not room_exists):
+        socket_to_room[request.sid] = room_name
+        room_storage[room_name] = {
+            'room_name': room_name,
+            'status': False,
+            'text_length': 0,
+            'joinies': [{
+                'id': request.sid,
+                'username': username,
+                'status': False,
+                'text_length': 0
+            }]
+        }
+        emit('update', {'data': room_storage[room_name]}, room=room_name)
+    return room_name
+
+@socketio.on('join-room')
+def handle_room_join(data):
+    username = data['username']
+    room_name = data['room_name']
+    socket_to_username[request.sid] = username
+    namespace = '/'
+    room_exists = room_name in socketio.server.manager.rooms.get(namespace, {})
+    if(room_exists):
+        existing_id = []
+        for user in room_storage[room_name]['joinies']:
+            existing_id.append(user['id'])
+        if request.sid not in existing_id:
+            joinies = {
+                'id': request.sid,
+                'username': username,
+                'status': False,
+                'text_length': 0
+            }
+            socket_to_room[request.sid] = room_name
+            room_storage[room_name]['joinies'].append(joinies)
+            join_room(room_name)
+            print(f'User {username} joined room: {room_name}')
+        emit('update', {'data': room_storage[room_name]}, room=room_name)
+        # if(request.sid not in socketio.server.manager.rooms[namespace][room_name]):
+
+    else:
+        print(f'Room {room_name} does not exist')
+
+@socketio.on('change-status')
+def handle_change_status(data):
+    room_name = data['room_name']
+    id = data['id']
+    for user in room_storage[room_name]['joinies']:
+        if user['id'] == id:
+            user['status'] = not user['status']
+            break
+    cnt = 0
+    for user in room_storage[room_name]['joinies']:
+        if user['status'] == True:
+            cnt += 1
+    if cnt == len(room_storage[room_name]['joinies']):
+        room_storage[room_name]['status'] = True
+        todo = 'this is a test so shut the fuck and type it you asshole'
+        room_storage[room_name]['text_length'] = len(todo)
+        emit('start-test', {'text': todo}, room=room_name)
+    emit('update', {'data': room_storage[room_name]}, room=room_name)
+
+@socketio.on('change-text')
+def handle_change_text(data):
+    room_name = data['room_name']
+    text_length = data['text_length']
+    for user in room_storage[room_name]['joinies']:
+        if user['id'] == request.sid:
+            user['text_length'] = text_length
+            break
+    emit('update', {'data': room_storage[room_name]}, room=room_name)
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+    room_name = socket_to_room[request.sid]
+    username = socket_to_username[request.sid]
+    leave_room(room_name)
+    if room_name in room_storage:
+        for user in room_storage[room_name]['joinies']:
+            if user['id'] == request.sid:
+                room_storage[room_name]['joinies'].remove(user)
+                break
+        if not room_storage[room_name]['joinies']:
+            del room_storage[room_name]
+        emit('update', {'data': room_storage[room_name]}, room=room_name)
+    del socket_to_room[request.sid]
+    del socket_to_username[request.sid]
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app)

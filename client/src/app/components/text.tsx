@@ -1,109 +1,110 @@
-'use client'
-import styles from './text.module.css'
+"use client";
+import styles from './text.module.css';
 import { v4 as uuidv4 } from 'uuid';
-import { useEffect, useState } from "react";
-import React from 'react'
-import {submit} from '../Features/SubmitText'
+import { useEffect, useRef, useState } from "react";
+import React from 'react';
+import { submit } from '../Features/SubmitText';
+import { Socket } from "socket.io-client";
 
 export default function Text(props: any) {
-    const [wpm, setWPM] = useState(0)
-    const [finish, setFinish] = useState(false)
-    const [check, setCheck] = useState(false)
-    const [accuracy, setAccuracy] = useState(0)
+    const [wpm, setWPM] = useState(0);
+    const [finish, setFinish] = useState(false);
+    const [check, setCheck] = useState(false);
+    const [accuracy, setAccuracy] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    let time: number = 0
-    let text: String = props.text
-    let setindex: number = 0
-    let index: number = 0
-    let timerID: any
-    let start: boolean = false
-    let temp: number = 0
-    let wrongvar: number = 0
+    const index = useRef(0);
+    const time = useRef(0);
+    const timerID = useRef<NodeJS.Timeout | null>(null);
+    const start = useRef(false);
+    const temp = useRef(0);
+    const wrongvar = useRef(0);
+
+    const socket: Socket = props.socket;
+    const text: string = props.text;
+
     const startTime = () => {
-        timerID = setInterval(() => {
-            time++;
-        }, 10)
-    }
+        timerID.current = setInterval(() => {
+            time.current++;
+        }, 10);
+    };
 
     useEffect(() => {
         const handleKeyDown = (event: any) => {
-            if(event.key == " "){
-                event.preventDefault()
+            if (event.key === " ") event.preventDefault();
+            if (event.key === "Escape") setCheck((prev) => !prev);
+            if (["Shift", "CapsLock", "Control"].includes(event.key)) return;
+
+            if (!start.current) {
+                startTime();
+                start.current = true;
             }
-            if(event.key == "Escape"){
-                setCheck(!check)
+
+            if (event.key === " ") {
+                temp.current++;
             }
-            if(event.key == "Shift" || event.key == "CapsLock" || event.key == "Control"){
-                return
-            }
-            if (!start) {
-                startTime()
-                start = true
-            }
-            if (event.key == " ") {
-                temp++
-            }
-            if (event.key == text[index] || (text[index] == "↵" && event.key == "Enter")) {
-                document.querySelector(`.${styles.current}`)?.classList.remove(styles.current);
-                console.log(document.querySelector(styles.current))
-                if(document.getElementById(`${index+2}`)?.textContent == "    "){
-                    index++
+
+            if (event.key === text[index.current] || (text[index.current] === "↵" && event.key === "Enter")) {
+                index.current++;
+                setCurrentIndex(index.current);
+
+                if (index.current === text.length) {
+                    const n = temp.current / (time.current / 6000);
+                    const wpmtemp = Math.floor(n * 100) / 100;
+                    if (timerID.current) clearInterval(timerID.current);
+                    setFinish(true);
+                    props.fetchRandomText();
+                    setCheck((prev) => !prev);
+                    temp.current++;
+                    setWPM(wpmtemp);
+                    const acc = Math.floor((100 - (wrongvar.current / text.length) * 100) * 100) / 100;
+                    setAccuracy(acc);
+                    submit(wpmtemp, acc, props.iscode);
                 }
-                index++
-                document.getElementById(`${index}`)?.classList.add(styles.typed)
-                document.getElementById(`${index+1}`)?.classList.add(styles.current)
-            }
-            else{
-                if(!document.getElementById(`${index+1}`)?.classList.contains(styles.wrong)){
-                    document.getElementById(`${index+1}`)?.classList.add(styles.wrong)
-                    wrongvar++;
+
+                if (socket) {
+                    socket.emit("change-text", { room_name: props.roomId, text_length: index.current, id: socket.id });
+                }
+            } else {
+                const el = document.getElementById(`${index.current + 1}`);
+                if (el && !el.classList.contains(styles.wrong)) {
+                    el.classList.add(styles.wrong);
+                    wrongvar.current++;
                 }
             }
-            if (index == text.length) {
-                const n = temp / (time / 6000)
-                const wpmtemp = Math.floor(n * 100) / 100
-                clearInterval(timerID)
-                setFinish(true)
-                props.fetchRandomText()
-                setCheck(!check)
-                temp++
-                setWPM(wpmtemp)
-                const acc = Math.floor((100-((wrongvar/text.length)*100)) * 100) / 100
-                setAccuracy(acc)
-                console.log(acc)
-                submit(wpmtemp, acc, props.iscode)
-            }
-        }
+        };
+
         document.addEventListener('keydown', handleKeyDown);
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [finish, check, text])
+    }, [finish, check, text]);
 
     return (
         <>
             <p className={styles.test}>
-                {Array.from(text).map((letter: String) => {
-                    setindex++
-                    let wtf = ""
-                    if(setindex == 1)
-                        wtf = styles.current
+                {Array.from(text).map((letter: string, i: number) => {
+                    const isFirst = i === 0;
+                    const isCurrent = i === currentIndex;
                     return (
-                        <React.Fragment key={uuidv4()}> 
-                            <span id={`${setindex}`} className={wtf}>
-                                {letter == "^" ? <>&nbsp;&nbsp;&nbsp;&nbsp;</>: letter}
+                        <React.Fragment key={uuidv4()}>
+                            <span
+                                id={`${i + 1}`}
+                                className={`${isCurrent ? styles.current : ""}`}
+                            >
+                                {letter === "^" ? <>&nbsp;&nbsp;&nbsp;&nbsp;</> : letter}
                             </span>
-                            {letter == "↵" && <br />}
+                            {letter === "↵" && <br />}
                         </React.Fragment>
-                    ) 
+                    );
                 })}
             </p>
-            {finish &&
+            {finish && (
                 <>
                     <p>Speed: {wpm} wpm</p>
                     <p>Accuracy: {accuracy}%</p>
                 </>
-            }
+            )}
         </>
-    )
+    );
 }
