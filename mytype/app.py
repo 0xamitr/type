@@ -338,16 +338,39 @@ def handle_room_creation(data):
             'room_name': room_name,
             'status': False,
             'text_length': 0,
+            'last_pos': 0,
             'joinies': [{
                 'id': request.sid,
                 'username': username,
                 'status': False,
-                'text_length': 0
+                'text_length': 0,
+                'pos': 0,
             }]
         }
         emit('update', {'data': room_storage[room_name]}, room=room_name)
     return room_name
 
+@socketio.on('finish-test')
+def handle_finish_test(data):
+    room_name = data['room_name']
+    cnt = 0
+    for user in room_storage[room_name]['joinies']:
+        if user['id'] == request.sid:
+            user['status'] = False
+            user['pos'] = room_storage[room_name]['last_pos'] + 1
+            room_storage[room_name]['last_pos'] = user['pos']
+        if user['status'] == False:
+            cnt += 1
+    if cnt == len(room_storage[room_name]['joinies']):
+        room_storage[room_name]['status'] = False
+        room_storage[room_name]['last_pos'] = 0
+        room_storage[room_name]['text_length'] = 0
+        for user in room_storage[room_name]['joinies']:
+            user['text_length'] = 0
+            user['pos'] = 0
+    emit('update', {'data': room_storage[room_name]}, room=room_name)
+
+        
 @socketio.on('join-room')
 def handle_room_join(data):
     username = data['username']
@@ -364,7 +387,8 @@ def handle_room_join(data):
                 'id': request.sid,
                 'username': username,
                 'status': False,
-                'text_length': 0
+                'text_length': 0,
+                'pos': 0,
             }
             socket_to_room[request.sid] = room_name
             room_storage[room_name]['joinies'].append(joinies)
@@ -392,6 +416,9 @@ def handle_change_status(data):
         room_storage[room_name]['status'] = True
         todo = 'this is a test so shut the fuck and type it you asshole'
         room_storage[room_name]['text_length'] = len(todo)
+        print("new test hey hye")
+        print()
+        print()
         emit('start-test', {'text': todo}, room=room_name)
     emit('update', {'data': room_storage[room_name]}, room=room_name)
 
