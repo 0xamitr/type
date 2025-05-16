@@ -59,7 +59,13 @@ export default function Text(props: any) {
                     setWPM(wpmtemp);
                     const acc = Math.floor((100 - (wrongvar.current / text.length) * 100) * 100) / 100;
                     setAccuracy(acc);
-                    submit(wpmtemp, acc, props.iscode);
+                    index.current = 0;
+                    setCurrentIndex(0);
+                    if(socket){
+                        socket.emit("finish-test", { room_name: props.roomId, id: socket.id });
+                    }
+                    else
+                        submit(wpmtemp, acc, props.iscode);
                 }
 
                 if (socket) {

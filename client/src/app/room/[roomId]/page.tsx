@@ -16,10 +16,14 @@ export default function RoomPage() {
         socket.emit("join-room", { room_name: roomId, username: "user" + randin })
         socket.on("update", (res: any) => {
             if (res && res.data && res.data) {
-                if(totaltext.current == 0)
+                if (totaltext.current == 0)
                     totaltext.current = res.data.text_length;
-                setJoinies(res.data.joinies);
-                console.log("joinies", res.data.joinies)
+                setRoom_data(res.data);
+                console.log("joinies", res.data)
+                if(res.data.text_length == 0){
+                    totaltext.current = 0;
+                    setText("");
+                }
             }
         })
         socket.on("start-test", (res: any) => {
@@ -34,7 +38,7 @@ export default function RoomPage() {
 
 
     const [text, setText] = useState<string>('');
-    const [joinies, setJoinies] = useState<any[]>([]);
+    const [room_data, setRoom_data] = useState<any>([]);
     return (
         <div>
             <h1>Room Page</h1>
@@ -42,28 +46,35 @@ export default function RoomPage() {
 
             <p>Room ID: {roomId}</p>
 
-            {joinies.length && joinies.map((joiny, index) => (
+            {room_data && room_data.joinies && room_data.joinies.length && room_data.joinies.map((joiny: any, index: any) => (
                 <div key={index}>
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                         <p>{joiny.username}</p>
                         {
-                            text.length == 0 &&
-                                joiny.status ?
-                                <button onClick={() => handleStatusChange(joiny.id)}>Ready</button> :
-                                <button onClick={() => handleStatusChange(joiny.id)}>Not Ready</button>
+                            !room_data.status &&
+                            (text.length == 0 &&
+                                (
+                                    joiny.status ?
+                                        <button onClick={() => handleStatusChange(joiny.id)}>Ready</button> :
+                                        <button onClick={() => handleStatusChange(joiny.id)}>Not Ready</button>
+                                )
+                            )
                         }
                         {
-                            text.length > 0 &&
-                            joiny.id == socket.id ?
-                            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                                <Text text={text} iscode={false} socket={socket} roomId={roomId} fetchRandomText={()=>{}}/> 
-                                <Progress text_length = {joiny.text_length} total_length = {totaltext.current}/>
-                            </div>
-                            : 
-                            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                                <p>{text}</p>
-                                <Progress text_length = {joiny.text_length} total_length = {totaltext.current}/>
-                            </div>
+                            room_data.status && joiny.status &&
+                            (text.length > 0 &&
+                                joiny.id == socket.id ?
+                                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                    <p>{room_data.status}</p>
+                                    <Text text={text} iscode={false} socket={socket} roomId={roomId} fetchRandomText={() => { }} />
+                                    <Progress text_length={joiny.text_length} total_length={totaltext.current} />
+                                </div>
+                                :
+                                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                    <p>{room_data.status}</p>
+                                    <p>{text}</p>
+                                    <Progress text_length={joiny.text_length} total_length={totaltext.current} />
+                                </div>)
                         }
                     </div>
                 </div>
