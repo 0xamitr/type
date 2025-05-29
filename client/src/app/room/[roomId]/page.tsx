@@ -50,6 +50,7 @@ export default function RoomPage() {
                 <div key={index}>
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                         <p>{joiny.username}</p>
+                        {joiny.id == socket.id && <p> (you)</p>}
                         {
                             !room_data.status &&
                             (text.length == 0 &&
@@ -75,6 +76,12 @@ export default function RoomPage() {
                                     <p>{text}</p>
                                     <Progress text_length={joiny.text_length} total_length={totaltext.current} />
                                 </div>)
+                        }
+                        {
+                            joiny.pos > 0 &&
+                            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                <p>Position: {joiny.pos}</p>
+                            </div>
                         }
                     </div>
                 </div>

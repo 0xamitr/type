@@ -69,7 +69,8 @@ export default function Text(props: any) {
                 }
 
                 if (socket) {
-                    socket.emit("change-text", { room_name: props.roomId, text_length: index.current, id: socket.id });
+                    if(index.current)
+                        socket.emit("change-text", { room_name: props.roomId, text_length: index.current, id: socket.id });
                 }
             } else {
                 const el = document.getElementById(`${index.current + 1}`);

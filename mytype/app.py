@@ -16,6 +16,7 @@ import random
 from flask_socketio import join_room, leave_room
 from flask_socketio import send, emit
 from flask_socketio import disconnect 
+from queue import PriorityQueue 
 
 
 expiration_time = datetime.now() + timedelta(days=7)
@@ -31,7 +32,7 @@ app.config['MYSQL_HOST'] = os.getenv("MYSQL_HOST")
 app.config['MYSQL_USER'] = os.getenv("MYSQL_USER")
 app.config['MYSQL_PASSWORD'] = os.getenv("MYSQL_PASSWORD")
 app.config['MYSQL_DB'] = os.getenv("MYSQL_DB")
-app.config['MYSQL_PORT'] = int(os.getenv("MYSQL_PORT"))
+app.config['MYSQL_PORT'] = os.getenv("MYSQL_PORT")
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['MYSQL_SSL_CA'] = '/path/to/your/ca/certificate.pem'
 app.config['MAIL_SERVER']='smtp.gmail.com'
@@ -53,11 +54,12 @@ socket_to_username = {}
 
 @app.route('/')
 def index():
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM users''')
-    results = cur.fetchall() 
-    cur.close()
-    return {'data': results}, 200
+    # cur = mysql.connection.cursor()
+    # cur.execute('''SELECT * FROM users''')
+    # results = cur.fetchall() 
+    # cur.close()
+    # return {'data': results}, 200
+    return "hello", 3000
 
 @app.route('/register', methods=['POST'])
 def insert():
@@ -357,8 +359,6 @@ def handle_finish_test(data):
     for user in room_storage[room_name]['joinies']:
         if user['id'] == request.sid:
             user['status'] = False
-            user['pos'] = room_storage[room_name]['last_pos'] + 1
-            room_storage[room_name]['last_pos'] = user['pos']
         if user['status'] == False:
             cnt += 1
     if cnt == len(room_storage[room_name]['joinies']):
@@ -379,6 +379,9 @@ def handle_room_join(data):
     namespace = '/'
     room_exists = room_name in socketio.server.manager.rooms.get(namespace, {})
     if(room_exists):
+        if(room_storage[room_name]['status'] == True):
+            emit('error', {'message': 'Room is already in progress'}, room=request.sid)
+            return
         existing_id = []
         for user in room_storage[room_name]['joinies']:
             existing_id.append(user['id'])
@@ -396,7 +399,6 @@ def handle_room_join(data):
             print(f'User {username} joined room: {room_name}')
         emit('update', {'data': room_storage[room_name]}, room=room_name)
         # if(request.sid not in socketio.server.manager.rooms[namespace][room_name]):
-
     else:
         print(f'Room {room_name} does not exist')
 
@@ -405,7 +407,7 @@ def handle_change_status(data):
     room_name = data['room_name']
     id = data['id']
     for user in room_storage[room_name]['joinies']:
-        if user['id'] == id:
+        if user['id'] == id and request.sid == id:
             user['status'] = not user['status']
             break
     cnt = 0
@@ -426,10 +428,17 @@ def handle_change_status(data):
 def handle_change_text(data):
     room_name = data['room_name']
     text_length = data['text_length']
+    q = PriorityQueue() 
     for user in room_storage[room_name]['joinies']:
         if user['id'] == request.sid:
             user['text_length'] = text_length
-            break
+        q.put((-1*user['text_length'], user))
+    i = 1
+    while not q.empty():
+        priority, user = q.get()
+        user['pos'] = i
+        i += 1
+        
     emit('update', {'data': room_storage[room_name]}, room=room_name)
 
 @socketio.on('disconnect')
