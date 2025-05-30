@@ -17,7 +17,7 @@ from flask_socketio import join_room, leave_room
 from flask_socketio import send, emit
 from flask_socketio import disconnect 
 from queue import PriorityQueue 
-
+from RandomText import random_text
 
 expiration_time = datetime.now() + timedelta(days=7)
 load_dotenv()
@@ -416,7 +416,7 @@ def handle_change_status(data):
             cnt += 1
     if cnt == len(room_storage[room_name]['joinies']):
         room_storage[room_name]['status'] = True
-        todo = 'this is a test so shut the fuck and type it you asshole'
+        todo = random_text()
         room_storage[room_name]['text_length'] = len(todo)
         print("new test hey hye")
         print()
